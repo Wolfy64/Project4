@@ -1,1 +1,33 @@
-Hello World!
+{% extends "DavidTicketBundle::base.html.twig" %}
+
+{% block body %}
+
+<div class="column col-12">
+
+    <h1>Louvre tickets office</h1>
+
+    {{ form_start(form) }}
+
+        {{ form_row(form.tickets.bookingDate) }}
+
+        {{ form_row(form.visitType) }}
+
+        {{ form_row(form.tickets.guest.firstName) }}
+
+        {{ form_row(form.tickets.guest.lastName) }}
+
+        {{ form_row(form.tickets.guest.dateOfBirth) }}
+
+        {{ form_row(form.tickets.guest.country) }}
+
+        {{ form_row(form.tickets.reducedPrice) }}
+
+        {{ form_row(form.email) }}
+
+        <input type="submit" value="Send" class="btn btn-primary" />
+
+    {{ form_end(form) }}
+
+</div>
+
+{% endblock %}

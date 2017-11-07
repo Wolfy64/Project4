@@ -43,19 +43,21 @@ class Ticket
     private $amount;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="id_guest", type="integer")
+     * @ORM\Column(name="reducedPrice", type="boolean")
      */
-    private $idGuest;
+    private $reducedPrice;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_order", type="integer")
+     * @ORM\OneToOne(targetEntity="David\TicketBundle\Entity\Guest", mappedBy="ticket")
      */
-    private $idOrder;
+    private $guest;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="David\TicketBundle\Entity\Reservation", inversedBy="tickets")
+     */
+    private $reservation;
 
     /**
      * Get id
@@ -140,51 +142,74 @@ class Ticket
     }
 
     /**
-     * Set idGuest
+     * Set guest
      *
-     * @param integer $idGuest
+     * @param \David\TicketBundle\Entity\Guest $guest
      *
      * @return Ticket
      */
-    public function setIdGuest($idGuest)
+    public function setGuest(\David\TicketBundle\Entity\Guest $guest = null)
     {
-        $this->idGuest = $idGuest;
+        $this->guest = $guest;
 
         return $this;
     }
 
     /**
-     * Get idGuest
+     * Get guest
      *
-     * @return int
+     * @return \David\TicketBundle\Entity\Guest
      */
-    public function getIdGuest()
+    public function getGuest()
     {
-        return $this->idGuest;
+        return $this->guest;
     }
 
     /**
-     * Set idOrder
+     * Set reservation
      *
-     * @param integer $idOrder
+     * @param \David\TicketBundle\Entity\Reservation $reservation
      *
      * @return Ticket
      */
-    public function setIdOrder($idOrder)
+    public function setReservation(\David\TicketBundle\Entity\Reservation $reservation = null)
     {
-        $this->idOrder = $idOrder;
+        $this->reservation = $reservation;
 
         return $this;
     }
 
     /**
-     * Get idOrder
+     * Get reservation
      *
-     * @return int
+     * @return \David\TicketBundle\Entity\Reservation
      */
-    public function getIdOrder()
+    public function getReservation()
     {
-        return $this->idOrder;
+        return $this->reservation;
+    }
+
+    /**
+     * Set reducedPrice
+     *
+     * @param boolean $reducedPrice
+     *
+     * @return Ticket
+     */
+    public function setReducedPrice($reducedPrice)
+    {
+        $this->reducedPrice = $reducedPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get reducedPrice
+     *
+     * @return boolean
+     */
+    public function getReducedPrice()
+    {
+        return $this->reducedPrice;
     }
 }
-

@@ -2,6 +2,7 @@
 
 namespace David\TicketBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,22 +39,32 @@ class Reservation
     /**
      * @var string
      *
-     * @ORM\Column(name="payment", type="string", length=255)
-     */
-    private $payment;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="cost", type="decimal", precision=10, scale=0)
      */
     private $cost;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="date")
+     */
+    private $date;
+
+    /**
+     * @ORM\OneToMany(targetEntity="David\TicketBundle\Entity\Ticket", mappedBy="reservation")
+     */
+    private $tickets;
+
+    public function __construct()
+    {
+        $this->tickets = new ArrayCollection();
+        $this->date = new \DateTime();
+    }
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -101,35 +112,11 @@ class Reservation
     /**
      * Get visitType
      *
-     * @return bool
+     * @return boolean
      */
     public function getVisitType()
     {
         return $this->visitType;
-    }
-
-    /**
-     * Set payment
-     *
-     * @param string $payment
-     *
-     * @return Reservation
-     */
-    public function setPayment($payment)
-    {
-        $this->payment = $payment;
-
-        return $this;
-    }
-
-    /**
-     * Get payment
-     *
-     * @return string
-     */
-    public function getPayment()
-    {
-        return $this->payment;
     }
 
     /**
@@ -155,5 +142,65 @@ class Reservation
     {
         return $this->cost;
     }
-}
 
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Reservation
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Add ticket
+     *
+     * @param \David\TicketBundle\Entity\Ticket $ticket
+     *
+     * @return Reservation
+     */
+    public function addTicket(\David\TicketBundle\Entity\Ticket $ticket)
+    {
+        $this->tickets[] = $ticket;
+
+        $ticket->setReservation($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove ticket
+     *
+     * @param \David\TicketBundle\Entity\Ticket $ticket
+     */
+    public function removeTicket(\David\TicketBundle\Entity\Ticket $ticket)
+    {
+        $this->tickets->removeElement($ticket);
+    }
+
+    /**
+     * Get tickets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTickets()
+    {
+        return $this->tickets;
+    }
+
+}

@@ -50,12 +50,9 @@ class Guest
     private $country;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id_ticket", type="integer")
+     * @ORM\OneToOne(targetEntity="David\TicketBundle\Entity\Ticket", inversedBy="guest")
      */
-    private $idTicket;
-
+    private $ticket;
 
     /**
      * Get id
@@ -164,27 +161,26 @@ class Guest
     }
 
     /**
-     * Set idTicket
+     * Set ticket
      *
-     * @param integer $idTicket
+     * @param \David\TicketBundle\Entity\Ticket $ticket
      *
      * @return Guest
      */
-    public function setIdTicket($idTicket)
+    public function setTicket(\David\TicketBundle\Entity\Ticket $ticket = null)
     {
-        $this->idTicket = $idTicket;
+        $this->ticket = $ticket;
 
         return $this;
     }
 
     /**
-     * Get idTicket
+     * Get ticket
      *
-     * @return int
+     * @return \David\TicketBundle\Entity\Ticket
      */
-    public function getIdTicket()
+    public function getTicket()
     {
-        return $this->idTicket;
+        return $this->ticket;
     }
 }
-
