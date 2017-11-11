@@ -23,8 +23,8 @@ class ReservationType extends AbstractType
             ->add('email',      TextType::class)
             ->add('visitType',  ChoiceType::class, [
                     'choices' => [
-                        'Full-Day' => \TRUE,
-                        'Half-Day' => \FALSE,
+                        'Full-Day' => 'fullDay',
+                        'Half-Day' => 'halfDay',
                         ],
                     'expanded' => \TRUE,
                     'multiple' => \FALSE,

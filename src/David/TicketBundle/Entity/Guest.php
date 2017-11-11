@@ -3,6 +3,7 @@
 namespace David\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Guest
@@ -23,36 +24,65 @@ class Guest
 
     /**
      * @var string
-     *
      * @ORM\Column(name="first_name", type="string", length=255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
+     * @Assert\Type(
+     *      type = "string",
+     *      message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $firstName;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="last_name", type="string", length=255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "Your last name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your last name cannot be longer than {{ limit }} characters"
+     * )
+     * @Assert\Type(
+     *      type = "string",
+     *      message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $lastName;
 
     /**
-     * @var \DateTime
-     *
+     * @var \Date
      * @ORM\Column(name="date_of_birth", type="date")
+     * @Assert\Date(
+     *      message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $dateOfBirth;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="country", type="string", length=255)
+     * @Assert\Type(
+     *      type = "string",
+     *      message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $country;
 
     /**
      * @ORM\OneToOne(targetEntity="David\TicketBundle\Entity\Ticket", inversedBy="guest")
+     * @Assert\Valid()
      */
     private $ticket;
+
+    public function __construct()
+    {
+        // $this->isLastName();
+    }
 
     /**
      * Get id
@@ -182,5 +212,14 @@ class Guest
     public function getTicket()
     {
         return $this->ticket;
+    }
+
+    /**
+     * @Assert\IsTrue()
+     */
+    public function isLastName()
+    {
+        var_dump( 'Hello World 2' );
+        return false;
     }
 }

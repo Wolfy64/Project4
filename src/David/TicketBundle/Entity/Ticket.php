@@ -3,6 +3,7 @@
 namespace David\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Ticket
@@ -22,40 +23,53 @@ class Ticket
     private $id;
 
     /**
-     * @var \DateTime
-     *
+     * @var \Date
      * @ORM\Column(name="booking_date", type="datetime")
+     * @Assert\Date(
+     *      message = "The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $bookingDate;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="price_type", type="string", length=255)
+     * @Assert\Type(
+     *      type = "string",
+     *      message = "The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $priceType;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=0)
+     * @Assert\Type(
+     *      type = "string",
+     *      message = "The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $amount;
 
     /**
      * @var bool
-     *
      * @ORM\Column(name="reducedPrice", type="boolean")
+     * @Assert\Type(
+     *      type = "bool",
+     *      message = "The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $reducedPrice;
 
     /**
      * @ORM\OneToOne(targetEntity="David\TicketBundle\Entity\Guest", mappedBy="ticket")
+     * @Assert\Valid()
      */
     private $guest;
 
     /**
      * @ORM\ManyToOne(targetEntity="David\TicketBundle\Entity\Reservation", inversedBy="tickets")
+     * @Assert\Valid()
      */
     private $reservation;
 

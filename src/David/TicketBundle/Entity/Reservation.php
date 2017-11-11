@@ -4,6 +4,7 @@ namespace David\TicketBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Reservation
@@ -24,34 +25,50 @@ class Reservation
 
     /**
      * @var string
-     *
      * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
+     * )
+     * @Assert\Email(
+     *      checkMX = true,
+     *      message = "The email '{{ value }}' is not a valid email."
+     * )
      */
     private $email;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="visit_type", type="boolean")
+     * @var string
+     * @ORM\Column(name="visit_type", type="string")
+     * @Assert\EqualTo(
+     *      value = "fullDay",
+     *      value = "halfDay"
+     * )
      */
     private $visitType;
 
     /**
      * @var string
-     *
      * @ORM\Column(name="cost", type="decimal", precision=10, scale=0)
+     * @Assert\Type(
+     *      type = "string",
+     *      message = "The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $cost;
 
     /**
-     * @var \DateTime
-     *
+     * @var \Date
      * @ORM\Column(name="date", type="date")
+     * @Assert\Date(
+     *      message = "The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $date;
 
     /**
      * @ORM\OneToMany(targetEntity="David\TicketBundle\Entity\Ticket", mappedBy="reservation")
+     * @Assert\Valid()
      */
     private $tickets;
 

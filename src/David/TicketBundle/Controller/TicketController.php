@@ -24,6 +24,12 @@ class TicketController extends Controller
             }
         }
 
+        $validator = $this->get('validator');
+        $listErrors = $validator->validate($form);
+
+        // var_dump( $listErrors );
+
+
         return $this->render('DavidTicketBundle:Default:index.html.twig', array(
             'form' => $form->createView()
         ));

@@ -1,5 +1,14 @@
 {% extends "DavidTicketBundle::base.html.twig" %}
 
+{% form_theme form _self %}
+
+{%- block radio_widget -%}
+    <label class="form-radio">
+        <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        <i class="form-icon"></i> {{ label }}
+    </label>
+{%- endblock radio_widget -%}
+
 {% block body %}
 
 <div class="column col-12">
@@ -10,8 +19,10 @@
 
         {{ form_row(form.tickets.bookingDate) }}
 
-        {{ form_row(form.visitType) }}
-
+        <div class="form-group">
+            {{ form_row(form.visitType) }}
+        </div>
+        
         {{ form_row(form.tickets.guest.firstName) }}
 
         {{ form_row(form.tickets.guest.lastName) }}
@@ -30,4 +41,17 @@
 
 </div>
 
+<div class="form-group">
+  <label class="form-label">Gender</label>
+  <label class="form-radio">
+    <input type="radio" name="gender" checked>
+    <i class="form-icon"></i> Male
+  </label>
+  <label class="form-radio">
+    <input type="radio" name="gender">
+    <i class="form-icon"></i> Female
+  </label>
+</div>
+
 {% endblock %}
+
