@@ -7,10 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 use David\TicketBundle\Form\GuestType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class TicketType extends AbstractType
 {
@@ -24,16 +23,23 @@ class TicketType extends AbstractType
                 'widget' => 'single_text'
                 ])
             ->add('guest',        GuestType::class)
-            ->add('reducedPrice', CheckboxType::class);
+            ->add('reducedPrice', CheckboxType::class,[
+                'required' => false
+                ]);
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'David\TicketBundle\Entity\Ticket'
+            'data_class' => 'David\TicketBundle\Entity\Ticket' // Default
+            // 'data_class' => Tag::class, // Doc
+            // 'data_class' => TicketType::class,
+            // 'data_class' => 'David\TicketBundle\Form\TicketType',
+            // David\TicketBundle\Form\TicketType
+            // David\TicketBundle\Entity\Ticket
         ));
     }
 

@@ -55,9 +55,9 @@ class Guest
     private $lastName;
 
     /**
-     * @var \Date
-     * @ORM\Column(name="date_of_birth", type="date")
-     * @Assert\Date(
+     * @var DateTime
+     * @ORM\Column(name="date_of_birth", type="datetime")
+     * @Assert\DateTime(
      *      message="The value {{ value }} is not a valid {{ type }}."
      * )
      */
@@ -78,11 +78,6 @@ class Guest
      * @Assert\Valid()
      */
     private $ticket;
-
-    public function __construct()
-    {
-        // $this->isLastName();
-    }
 
     /**
      * Get id
@@ -145,7 +140,7 @@ class Guest
     /**
      * Set dateOfBirth
      *
-     * @param \DateTime $dateOfBirth
+     * @param string $dateOfBirth
      *
      * @return Guest
      */
@@ -159,7 +154,7 @@ class Guest
     /**
      * Get dateOfBirth
      *
-     * @return \DateTime
+     * @return string
      */
     public function getDateOfBirth()
     {
@@ -212,14 +207,5 @@ class Guest
     public function getTicket()
     {
         return $this->ticket;
-    }
-
-    /**
-     * @Assert\IsTrue()
-     */
-    public function isLastName()
-    {
-        var_dump( 'Hello World 2' );
-        return false;
     }
 }

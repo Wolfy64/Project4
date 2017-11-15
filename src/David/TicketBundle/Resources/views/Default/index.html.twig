@@ -17,41 +17,20 @@
 
     {{ form_start(form) }}
 
-        {{ form_row(form.tickets.bookingDate) }}
-
-        <div class="form-group">
+        {% for ticket in form.tickets %}
+            {{ form_row(ticket.bookingDate) }}
             {{ form_row(form.visitType) }}
-        </div>
-        
-        {{ form_row(form.tickets.guest.firstName) }}
-
-        {{ form_row(form.tickets.guest.lastName) }}
-
-        {{ form_row(form.tickets.guest.dateOfBirth) }}
-
-        {{ form_row(form.tickets.guest.country) }}
-
-        {{ form_row(form.tickets.reducedPrice) }}
-
-        {{ form_row(form.email) }}
+            {{ form_row(ticket.guest.firstName) }}
+            {{ form_row(ticket.guest.lastName) }}
+            {{ form_row(ticket.guest.dateOfBirth) }}
+            {{ form_row(ticket.guest.country) }}
+            {{ form_row(ticket.reducedPrice) }}
+            {{ form_row(form.email) }}
+        {% endfor %}
 
         <input type="submit" value="Send" class="btn btn-primary" />
 
     {{ form_end(form) }}
-
-</div>
-
-<div class="form-group">
-  <label class="form-label">Gender</label>
-  <label class="form-radio">
-    <input type="radio" name="gender" checked>
-    <i class="form-icon"></i> Male
-  </label>
-  <label class="form-radio">
-    <input type="radio" name="gender">
-    <i class="form-icon"></i> Female
-  </label>
-</div>
 
 {% endblock %}
 

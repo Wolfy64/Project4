@@ -8,9 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-
-use David\TicketBundle\Form\TicketType;
-
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class ReservationType extends AbstractType
 {
@@ -29,7 +27,11 @@ class ReservationType extends AbstractType
                     'expanded' => \TRUE,
                     'multiple' => \FALSE,
                 ])
-            ->add('tickets',    TicketType::class, ['data_class' => null]);
+
+            ->add('tickets',    CollectionType::class, [
+                'entry_type'    => TicketType::class,
+                'entry_options' => array('label' => false),
+            ]);
     }
     
     /**

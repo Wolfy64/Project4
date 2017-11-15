@@ -5,6 +5,8 @@ namespace David\TicketBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\DateTime;
+
 
 /**
  * Reservation
@@ -40,29 +42,24 @@ class Reservation
     /**
      * @var string
      * @ORM\Column(name="visit_type", type="string")
-     * @Assert\EqualTo(
-     *      value = "fullDay",
-     *      value = "halfDay"
-     * )
+     * @Assert\Choice( {"fullDay", "halfDay"} )
      */
     private $visitType;
 
     /**
-     * @var string
+     * @var decimal
      * @ORM\Column(name="cost", type="decimal", precision=10, scale=0)
      * @Assert\Type(
-     *      type = "string",
+     *      type = "decimal",
      *      message = "The value {{ value }} is not a valid {{ type }}."
      * )
      */
     private $cost;
 
     /**
-     * @var \Date
-     * @ORM\Column(name="date", type="date")
-     * @Assert\Date(
-     *      message = "The value {{ value }} is not a valid {{ type }}."
-     * )
+     * @var DateTime
+     * @ORM\Column(name="date", type="datetime")
+     * @Assert\DateTime()
      */
     private $date;
 
@@ -193,9 +190,7 @@ class Reservation
      */
     public function addTicket(\David\TicketBundle\Entity\Ticket $ticket)
     {
-        $this->tickets[] = $ticket;
-
-        $ticket->setReservation($this);
+        $this->tickets->add($ticket);
 
         return $this;
     }

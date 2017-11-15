@@ -23,9 +23,9 @@ class Ticket
     private $id;
 
     /**
-     * @var \Date
+     * @var \DateTime
      * @ORM\Column(name="booking_date", type="datetime")
-     * @Assert\Date(
+     * @Assert\DateTime(
      *      message = "The value {{ value }} is not a valid {{ type }}."
      * )
      */
@@ -42,10 +42,10 @@ class Ticket
     private $priceType;
 
     /**
-     * @var string
+     * @var decimal
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=0)
      * @Assert\Type(
-     *      type = "string",
+     *      type = "decimal",
      *      message = "The value {{ value }} is not a valid {{ type }}."
      * )
      */
@@ -86,7 +86,7 @@ class Ticket
     /**
      * Set bookingDate
      *
-     * @param \DateTime $bookingDate
+     * @param string $bookingDate
      *
      * @return Ticket
      */
@@ -100,7 +100,7 @@ class Ticket
     /**
      * Get bookingDate
      *
-     * @return \DateTime
+     * @return string
      */
     public function getBookingDate()
     {
