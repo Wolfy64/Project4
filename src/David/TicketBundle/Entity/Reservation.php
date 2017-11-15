@@ -42,7 +42,10 @@ class Reservation
     /**
      * @var string
      * @ORM\Column(name="visit_type", type="string")
-     * @Assert\Choice( {"fullDay", "halfDay"} )
+     * @Assert\Choice(
+     *      {"fullDay", "halfDay"},
+     *      strict = true     
+     *  )
      */
     private $visitType;
 
