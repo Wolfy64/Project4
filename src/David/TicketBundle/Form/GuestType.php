@@ -7,7 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+
+use David\TicketBundle\Entity\Guest;
 
 class GuestType extends AbstractType
 {
@@ -16,13 +18,20 @@ class GuestType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $lastName = 'Test';
+
         $builder
-            ->add('dateOfBirth', DateType::class,[
-                'widget' => 'single_text'
-                ])
             ->add('firstName',   TextType::class)
-            ->add('lastName',    TextType::class)
-            ->add('country',     TextType::class);
+            ->add('lastName',    TextType::class,[
+                'attr' => ['placeholder' => $lastName]
+                ])
+            ->add('country',     TextType::class)
+            ->add('dateOfBirth', BirthdayType::class,[
+                // 'widget' => 'single_text',
+                // 'input' => 'string',
+                ]);
+
+
     }
     
     /**
@@ -31,7 +40,7 @@ class GuestType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'David\TicketBundle\Entity\Guest'
+            'data_class' => Guest::class
         ));
     }
 

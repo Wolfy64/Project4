@@ -15,34 +15,39 @@ class TicketController extends Controller
 {
     public function indexAction(Request $request)
     {
-
         $reservation = new Reservation();
         $ticket      = new Ticket();
-        $guest       = new Guest();
 
-        $guest->setTicket($ticket);
-        $ticket->setGuest($guest);
-        $reservation->getTickets()->add($ticket);
-        
+        $reservation->addTicket($ticket);
+
         $form = $this->createForm(ReservationType::class, $reservation);
 
-        if ($request->isMethod('POST')) {
-            $form->handleRequest($request);
+        $form->handleRequest($request);
 
-            if( $form->isValid() ){
-                $reservation->setCost(20);
-                $ticket->setPriceType('normal');
-                $ticket->setAmount(16);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($guest);
-                $em->persist($ticket);
-                $em->persist($reservation);
-                $em->flush();
-            }
+        // Défini certains attributs en interne
+        foreach ($reservation->getTickets() as $ticket) {
+            $ticket->setAmount(99);
+            $reservation->setCost(20);
+            $ticket->setPriceType($ticket->getGuest()->getDateOfBirth());
         }
 
-        return $this->render('DavidTicketBundle:Default:index.html.twig', array(
-            'form' => $form->createView()
+        \dump($reservation);
+
+        // Vérifie que les valeurs entrées sont envoyées et correctes
+        if ($form->isSubmitted() && $form->isValid()){
+            
+            // Persiste chaque objet avant d'envoyé le tout en bdd via Doctrine
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ticket);
+            $em->persist($reservation);
+            $em->flush();
+            var_dump( 'Data send !!' );
+        }
+
+        return $this->render('DavidTicketBundle:Ticket:index.html.twig', array(
+            'form' => $form->createView(),
+            'price' => '$ticket->getPriceType()',
+            'cost' => '$reservation->getCost()'
         ));
     }
 }

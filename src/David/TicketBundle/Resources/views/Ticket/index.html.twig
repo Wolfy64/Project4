@@ -1,0 +1,82 @@
+{% extends "DavidTicketBundle::base.html.twig" %}
+
+{% form_theme form _self %}
+
+{%- block radio_widget -%}
+    <label class="form-radio">
+        <input type="radio" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        <i class="form-icon"></i> {{ label }}
+    </label>
+{%- endblock radio_widget -%}
+
+{% block body %}
+
+<div class="column col-12">
+
+    <h1>Louvre tickets office</h1>
+
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        
+        {{ form_row(form.bookingDate) }}
+        {{ form_row(form.visitType) }}
+        {% for ticket in form.tickets %}
+            {{ form_row(ticket.guest) }}
+            {{ form_row(ticket.reducedPrice) }}
+        {% endfor %}
+        {{ form_row(form.email) }}
+
+        {# store the prototype on the data-prototype attribute #}
+        <div id="ticket-fields-list" 
+            data-prototype="{{ form_widget(form.tickets.vars.prototype)|e }}"
+            >
+        </div>
+
+        <a href="#" id="add-another-ticket">Add another ticket</a>
+        </br>
+
+        <input type="submit" value="Send" class="btn btn-primary" />
+
+    {{ form_end(form) }}
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <script type="text/javascript">
+        // keep track of how many ticket fields have been rendered
+        var ticketCount = '{{ form.tickets|length }}';
+
+        jQuery(document).ready(function() {
+            jQuery('#add-another-ticket').click(function(e) {
+                e.preventDefault();
+
+                var ticketList = jQuery('#ticket-fields-list');
+
+                // grab the prototype template
+                var newWidget = ticketList.attr('data-prototype');
+                // replace the "__name__" used in the id and name of the prototype
+                // with a number that's unique to your emails
+                // end name attribute looks like name="contact[emails][2]"
+                newWidget = newWidget.replace(/__name__/g, ticketCount);
+                ticketCount++;
+
+                // create a new list element and add it to the list
+                var newLi = jQuery('<li></li>').html(newWidget);
+                newLi.appendTo(ticketList);
+            });
+        })
+    </script>
+
+<div class="form-group">
+    <div class="col-3">
+        <label class="form-label" for="input-example-14">Date</label>
+    </div>
+    <div class="col-9">
+        <input class="form-input" id="input-example-14" value="2016-12-31" type="date">
+    </div>
+</div>
+
+<h3>le cout total est de {{ cost }}
+
+
+
+{% endblock %}

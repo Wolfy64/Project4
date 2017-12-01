@@ -4,6 +4,8 @@ namespace David\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use David\TicketBundle\Entity\Guest;
+use David\TicketBundle\Entity\Reservation;
 
 /**
  * Ticket
@@ -23,18 +25,10 @@ class Ticket
     private $id;
 
     /**
-     * @var \DateTime
-     * @ORM\Column(name="booking_date", type="datetime")
-     * @Assert\DateTime(
-     *      message = "The value {{ value }} is not a valid {{ type }}."
-     * )
-     */
-    private $bookingDate;
-
-    /**
      * @var string
      * @ORM\Column(name="price_type", type="string", length=255)
-     * @Assert\Type(
+     * Assert\NotBlank()
+     * Assert\Type(
      *      type = "string",
      *      message = "The value {{ value }} is not a valid {{ type }}."
      * )
@@ -44,8 +38,9 @@ class Ticket
     /**
      * @var decimal
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=0)
-     * @Assert\Type(
-     *      type = "decimal",
+     * Assert\NotBlank()
+     * Assert\Type(
+     *      type = "numeric",
      *      message = "The value {{ value }} is not a valid {{ type }}."
      * )
      */
@@ -62,13 +57,21 @@ class Ticket
     private $reducedPrice;
 
     /**
-     * @ORM\OneToOne(targetEntity="David\TicketBundle\Entity\Guest", mappedBy="ticket")
+     * @ORM\OneToOne(
+     *      targetEntity="David\TicketBundle\Entity\Guest",
+     *      mappedBy="ticket",
+     *      cascade={"persist"})
+     * )
      * @Assert\Valid()
      */
     private $guest;
 
     /**
-     * @ORM\ManyToOne(targetEntity="David\TicketBundle\Entity\Reservation", inversedBy="tickets")
+     * @ORM\ManyToOne(
+     *      targetEntity="David\TicketBundle\Entity\Reservation",
+     *      inversedBy="tickets",
+     *      cascade={"persist", "remove"})
+     * )
      * @Assert\Valid()
      */
     private $reservation;
@@ -84,30 +87,6 @@ class Ticket
     }
 
     /**
-     * Set bookingDate
-     *
-     * @param string $bookingDate
-     *
-     * @return Ticket
-     */
-    public function setBookingDate($bookingDate)
-    {
-        $this->bookingDate = $bookingDate;
-
-        return $this;
-    }
-
-    /**
-     * Get bookingDate
-     *
-     * @return string
-     */
-    public function getBookingDate()
-    {
-        return $this->bookingDate;
-    }
-
-    /**
      * Set priceType
      *
      * @param string $priceType
@@ -116,7 +95,16 @@ class Ticket
      */
     public function setPriceType($priceType)
     {
-        $this->priceType = $priceType;
+        // $this->priceType = $priceType;
+
+        $today = new \DateTime();
+        $interval = $today->diff($priceType)->format('%Y');
+
+        if ($interval < 18) {
+            $this->priceType = 'minor';
+        } else {
+            $this->priceType = 'adult';
+        }
 
         return $this;
     }

@@ -28,6 +28,7 @@ class Reservation
     /**
      * @var string
      * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\NotBlank()
      * @Assert\Length(
      *      max = 255,
      *      maxMessage = "Your email cannot be longer than {{ limit }} characters"
@@ -42,6 +43,7 @@ class Reservation
     /**
      * @var string
      * @ORM\Column(name="visit_type", type="string")
+     * @Assert\NotBlank()
      * @Assert\Choice(
      *      {"fullDay", "halfDay"},
      *      strict = true     
@@ -52,22 +54,39 @@ class Reservation
     /**
      * @var decimal
      * @ORM\Column(name="cost", type="decimal", precision=10, scale=0)
-     * @Assert\Type(
-     *      type = "decimal",
+     * Assert\NotBlank()
+     * Assert\Type(
+     *      type = "numeric",
      *      message = "The value {{ value }} is not a valid {{ type }}."
      * )
      */
     private $cost;
 
     /**
-     * @var DateTime
+     * @var \DateTime
      * @ORM\Column(name="date", type="datetime")
+     * @Assert\NotBlank()
      * @Assert\DateTime()
      */
-    private $date;
+    private $orderDate;
 
     /**
-     * @ORM\OneToMany(targetEntity="David\TicketBundle\Entity\Ticket", mappedBy="reservation")
+     * @var \DateTime
+     * @ORM\Column(name="booking_date", type="datetime")
+     * @Assert\NotBlank()
+     * @Assert\DateTime(
+     *      message = "The value {{ value }} is not a valid {{ type }}."
+     * )
+     */
+    private $bookingDate;
+
+    /**
+     * @ORM\OneToMany(
+     *      targetEntity="David\TicketBundle\Entity\Ticket",
+     *      mappedBy="reservation",
+     *      cascade={"persist"}
+     * )
+     * @Assert\NotBlank()
      * @Assert\Valid()
      */
     private $tickets;
@@ -75,7 +94,7 @@ class Reservation
     public function __construct()
     {
         $this->tickets = new ArrayCollection();
-        $this->date = new \DateTime();
+        $this->orderDate = new \DateTime();
     }
 
     /**
@@ -161,30 +180,6 @@ class Reservation
     }
 
     /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
-     * @return Reservation
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    /**
      * Add ticket
      *
      * @param \David\TicketBundle\Entity\Ticket $ticket
@@ -194,8 +189,6 @@ class Reservation
     public function addTicket(\David\TicketBundle\Entity\Ticket $ticket)
     {
         $this->tickets->add($ticket);
-
-        return $this;
     }
 
     /**
@@ -216,6 +209,54 @@ class Reservation
     public function getTickets()
     {
         return $this->tickets;
+    }
+
+    /**
+     * Set orderDate
+     *
+     * @param \DateTime $orderDate
+     *
+     * @return Reservation
+     */
+    public function setOrderDate($orderDate)
+    {
+        $this->orderDate = $orderDate;
+
+        return $this;
+    }
+
+    /**
+     * Get orderDate
+     *
+     * @return \DateTime
+     */
+    public function getOrderDate()
+    {
+        return $this->orderDate;
+    }
+
+    /**
+     * Set bookingDate
+     *
+     * @param \DateTime $bookingDate
+     *
+     * @return Reservation
+     */
+    public function setBookingDate($bookingDate)
+    {
+        $this->bookingDate = $bookingDate;
+
+        return $this;
+    }
+
+    /**
+     * Get bookingDate
+     *
+     * @return \DateTime
+     */
+    public function getBookingDate()
+    {
+        return $this->bookingDate;
     }
 
 }

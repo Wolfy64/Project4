@@ -25,6 +25,7 @@ class Guest
     /**
      * @var string
      * @ORM\Column(name="first_name", type="string", length=255)
+     * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
@@ -41,6 +42,7 @@ class Guest
     /**
      * @var string
      * @ORM\Column(name="last_name", type="string", length=255)
+     * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
@@ -55,9 +57,10 @@ class Guest
     private $lastName;
 
     /**
-     * @var DateTime
-     * @ORM\Column(name="date_of_birth", type="datetime")
-     * @Assert\DateTime(
+     * @var \Date
+     * @ORM\Column(name="date_of_birth", type="date")
+     * @Assert\NotBlank()
+     * @Assert\Date(
      *      message="The value {{ value }} is not a valid {{ type }}."
      * )
      */
@@ -66,6 +69,7 @@ class Guest
     /**
      * @var string
      * @ORM\Column(name="country", type="string", length=255)
+     * @Assert\NotBlank()
      * @Assert\Type(
      *      type = "string",
      *      message="The value {{ value }} is not a valid {{ type }}."
@@ -75,6 +79,7 @@ class Guest
 
     /**
      * @ORM\OneToOne(targetEntity="David\TicketBundle\Entity\Ticket", inversedBy="guest")
+     * Assert\NotBlank()
      * @Assert\Valid()
      */
     private $ticket;
