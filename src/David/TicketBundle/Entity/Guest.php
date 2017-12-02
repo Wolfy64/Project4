@@ -79,7 +79,6 @@ class Guest
 
     /**
      * @ORM\OneToOne(targetEntity="David\TicketBundle\Entity\Ticket", inversedBy="guest")
-     * Assert\NotBlank()
      * @Assert\Valid()
      */
     private $ticket;
@@ -197,7 +196,7 @@ class Guest
      *
      * @return Guest
      */
-    public function setTicket(\David\TicketBundle\Entity\Ticket $ticket = null)
+    public function setTicket($ticket = null)
     {
         $this->ticket = $ticket;
 

@@ -4,8 +4,6 @@ namespace David\TicketBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use David\TicketBundle\Entity\Guest;
-use David\TicketBundle\Entity\Reservation;
 
 /**
  * Ticket
@@ -15,6 +13,12 @@ use David\TicketBundle\Entity\Reservation;
  */
 class Ticket
 {
+    const ELDERLY = 12;
+    const NORMAL = 16;
+    const CHILD = 8;
+    const TODDLER = 0;
+    const DISCOUNT_RATE = 10;
+    
     /**
      * @var int
      *
@@ -27,22 +31,12 @@ class Ticket
     /**
      * @var string
      * @ORM\Column(name="price_type", type="string", length=255)
-     * Assert\NotBlank()
-     * Assert\Type(
-     *      type = "string",
-     *      message = "The value {{ value }} is not a valid {{ type }}."
-     * )
      */
     private $priceType;
 
     /**
      * @var decimal
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=0)
-     * Assert\NotBlank()
-     * Assert\Type(
-     *      type = "numeric",
-     *      message = "The value {{ value }} is not a valid {{ type }}."
-     * )
      */
     private $amount;
 
@@ -95,15 +89,25 @@ class Ticket
      */
     public function setPriceType($priceType)
     {
-        // $this->priceType = $priceType;
-
         $today = new \DateTime();
         $interval = $today->diff($priceType)->format('%Y');
 
-        if ($interval < 18) {
-            $this->priceType = 'minor';
-        } else {
-            $this->priceType = 'adult';
+        switch ($interval) {
+            case $interval >= 60:
+                $this->priceType = 'elderly';
+                break;
+            case $interval >= 12:
+                $this->priceType = 'normal';
+                break;
+            case $interval > 4 && $interval < 12:
+                $this->priceType = 'child';
+                break;
+            case $interval <= 4:
+                $this->priceType = 'toddler';
+                break;
+            default:
+                throw new Exception("Error Processing Request => priceType: " . $interval);
+                break;
         }
 
         return $this;
@@ -128,7 +132,28 @@ class Ticket
      */
     public function setAmount($amount)
     {
-        $this->amount = $amount;
+        switch ($amount) {
+            case 'elderly':
+                $this->amount = $this::ELDERLY;
+                break;
+            case 'normal':
+                $this->amount = $this::NORMAL;
+                break;
+            case 'child':
+                $this->amount = $this::CHILD;
+                break;
+            case 'toddler':
+                $this->amount = $this::TODDLER;
+                break;
+            default:
+                throw new Exception("Error Processing Request => amount: ".$amount);
+                break;
+        }
+
+        // Subtract discount if priceType = 'normal'
+        if ( $this->getReducedPrice() === true && $this->priceType === 'normal'){
+            $this->amount = $this->amount - $this::DISCOUNT_RATE;
+        }
 
         return $this;
     }
@@ -150,7 +175,7 @@ class Ticket
      *
      * @return Ticket
      */
-    public function setGuest(\David\TicketBundle\Entity\Guest $guest = null)
+    public function setGuest($guest = null)
     {
         $this->guest = $guest;
 
@@ -174,7 +199,7 @@ class Ticket
      *
      * @return Ticket
      */
-    public function setReservation(\David\TicketBundle\Entity\Reservation $reservation = null)
+    public function setReservation($reservation = null)
     {
         $this->reservation = $reservation;
 

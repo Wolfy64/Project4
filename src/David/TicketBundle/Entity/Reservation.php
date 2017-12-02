@@ -54,11 +54,6 @@ class Reservation
     /**
      * @var decimal
      * @ORM\Column(name="cost", type="decimal", precision=10, scale=0)
-     * Assert\NotBlank()
-     * Assert\Type(
-     *      type = "numeric",
-     *      message = "The value {{ value }} is not a valid {{ type }}."
-     * )
      */
     private $cost;
 
@@ -86,7 +81,6 @@ class Reservation
      *      mappedBy="reservation",
      *      cascade={"persist"}
      * )
-     * @Assert\NotBlank()
      * @Assert\Valid()
      */
     private $tickets;
@@ -164,7 +158,7 @@ class Reservation
      */
     public function setCost($cost)
     {
-        $this->cost = $cost;
+        $this->cost = $this->cost + $cost;
 
         return $this;
     }
@@ -186,7 +180,7 @@ class Reservation
      *
      * @return Reservation
      */
-    public function addTicket(\David\TicketBundle\Entity\Ticket $ticket)
+    public function addTicket($ticket)
     {
         $this->tickets->add($ticket);
     }
@@ -196,7 +190,7 @@ class Reservation
      *
      * @param \David\TicketBundle\Entity\Ticket $ticket
      */
-    public function removeTicket(\David\TicketBundle\Entity\Ticket $ticket)
+    public function removeTicket($ticket)
     {
         $this->tickets->removeElement($ticket);
     }
