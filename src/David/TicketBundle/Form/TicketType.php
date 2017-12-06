@@ -19,7 +19,9 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('guest',        GuestType::class)
+            ->add('guest',        GuestType::class, [
+                'label' => false
+            ])
             ->add('reducedPrice', CheckboxType::class,[
                 'required' => false
                 ]);
@@ -31,7 +33,6 @@ class TicketType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            // 'data_class' => 'David\TicketBundle\Entity\Ticket'
             'data_class' => Ticket::class
         ));
     }

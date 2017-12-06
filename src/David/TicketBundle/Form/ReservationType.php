@@ -22,10 +22,10 @@ class ReservationType extends AbstractType
     {
         $builder
             ->add('bookingDate', DateType::class, [
-                    // 'widget' => 'single_text',
+                    'widget' => 'single_text',
                 'years' => range(2017, 2027),
-                    // 'placeholder' => ['year' => '2017', 'month' => '01', 'day' => '23']
-                'placeholder' => ['day' => '03', 'month' => '01', 'year' => '2017']
+                'placeholder' => ['year' => '2017', 'month' => '01', 'day' => '23']
+                // 'placeholder' => ['day' => '03', 'month' => '01', 'year' => '2017']
                 ])
             ->add('visitType',   ChoiceType::class, [
                     'choices' => [

@@ -24,18 +24,17 @@ class TicketController extends Controller
 
         $form->handleRequest($request);
 
-        // Défini certains attributs en interne
-        foreach ($reservation->getTickets() as $ticket) {
-            $ticket->setAmount(99);
-            $reservation->setCost(20);
-            $ticket->setPriceType($ticket->getGuest()->getDateOfBirth());
-        }
-
-        \dump($reservation);
-
-        // Vérifie que les valeurs entrées sont envoyées et correctes
         if ($form->isSubmitted() && $form->isValid()){
-            
+
+            // Défini certains attributs en interne
+            foreach ($reservation->getTickets() as $ticket) {
+                $ticket->setPriceType($ticket
+                                        ->getGuest()
+                                        ->getDateOfBirth());
+                $ticket->setAmount( $ticket->getPriceType() );
+                $reservation->setCost($ticket->getAmount() );
+            }
+            \dump($ticket);
             // Persiste chaque objet avant d'envoyé le tout en bdd via Doctrine
             $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
@@ -46,8 +45,9 @@ class TicketController extends Controller
 
         return $this->render('DavidTicketBundle:Ticket:index.html.twig', array(
             'form' => $form->createView(),
-            'price' => '$ticket->getPriceType()',
-            'cost' => '$reservation->getCost()'
+            'priceType' => $ticket->getPriceType(),
+            'amount'    => $ticket->getAmount(),
+            'cost' => $reservation->getCost(),
         ));
     }
 }

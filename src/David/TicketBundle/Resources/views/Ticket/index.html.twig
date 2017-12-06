@@ -1,4 +1,4 @@
-{% extends "DavidTicketBundle::base.html.twig" %}
+{% extends "DavidTicketBundle::layout.html.twig" %}
 
 {% form_theme form _self %}
 
@@ -11,34 +11,38 @@
 
 {% block body %}
 
-<div class="column col-12">
+<div class="column col-12 col-mx-auto">
 
     <h1>Louvre tickets office</h1>
 
-        {{ form_start(form) }}
-        {{ form_errors(form) }}
-        
-        {{ form_row(form.bookingDate) }}
-        {{ form_row(form.visitType) }}
-        {% for ticket in form.tickets %}
-            {{ form_row(ticket.guest) }}
-            {{ form_row(ticket.reducedPrice) }}
-        {% endfor %}
-        {{ form_row(form.email) }}
+    <div class="form-horizontal">
+        <div class="form-group">
 
-        {# store the prototype on the data-prototype attribute #}
-        <div id="ticket-fields-list" 
-            data-prototype="{{ form_widget(form.tickets.vars.prototype)|e }}"
-            >
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.bookingDate) }}
+            {{ form_row(form.visitType) }}
+            {% for ticket in form.tickets %}
+                {{ form_row(ticket.guest) }}
+                {{ form_row(ticket.reducedPrice) }}
+            {% endfor %}
+            {{ form_row(form.email) }}
+    
+            {# store the prototype on the data-prototype attribute #}
+            <div id="ticket-fields-list" 
+                data-prototype="{{ form_widget(form.tickets.vars.prototype)|e }}"
+                >
+            </div>
+    
+            <a href="#" id="add-another-ticket">Add another ticket</a>
+            </br>
+    
+            <input type="submit" value="Send" class="btn btn-primary" />
+    
+            {{ form_end(form) }}
         </div>
-
-        <a href="#" id="add-another-ticket">Add another ticket</a>
-        </br>
-
-        <input type="submit" value="Send" class="btn btn-primary" />
-
-    {{ form_end(form) }}
-
+    </div>
+    
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 
     <script type="text/javascript">
@@ -75,8 +79,10 @@
     </div>
 </div>
 
-<h3>le cout total est de {{ cost }}
 
+<h3>le cout total est de {{ cost }} </h3>
+<h3>le type de billet est  {{ priceType }} </h3>
+<h3>le prix du billet est  {{ amount }} </h3>
 
 
 {% endblock %}
