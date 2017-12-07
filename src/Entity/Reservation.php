@@ -69,6 +69,7 @@ class Reservation
      *      message = "The value {{ value }} is not a valid {{ type }}."
      * )
      * @ReservationAssert\PublicHoliday()
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $bookingDate;
 

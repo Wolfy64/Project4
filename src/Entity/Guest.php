@@ -55,6 +55,7 @@ class Guest
      * @var \Date
      * @ORM\Column(name="date_of_birth", type="date")
      * @Assert\NotBlank()
+     * @Assert\LessThanOrEqual("Today")
      * @Assert\Date(
      *      message="The value {{ value }} is not a valid {{ type }}."
      * )
