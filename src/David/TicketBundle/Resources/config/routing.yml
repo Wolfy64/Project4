@@ -1,3 +1,0 @@
-david_ticket_homepage:
-    path:     /
-    defaults: { _controller: DavidTicketBundle:Ticket:index }
