@@ -44,6 +44,7 @@ class Reservation
      *      {"fullDay", "halfDay"},
      *      strict = true     
      *  )
+     * @ReservationAssert\VisitType()
      */
     private $visitType;
 
@@ -79,6 +80,7 @@ class Reservation
      *      mappedBy="reservation",
      *      cascade={"persist"}
      * )
+     * @ORM\JoinColumn(nullable=false)
      * @Assert\Valid()
      */
     private $tickets;
@@ -251,13 +253,6 @@ class Reservation
         $this->tickets->removeElement($ticket);
     }
 
-    /**
-     * Define cost
-     *
-     * @param string $cost
-     *
-     * @return Reservation
-     */
     public function doCost()
     {
         foreach ($this->tickets as $ticket) {

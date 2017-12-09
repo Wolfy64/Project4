@@ -183,6 +183,8 @@ class Ticket
     {
         $this->guest = $guest;
 
+        $guest->setTicket($this);
+
         return $this;
     }
 

@@ -13,8 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class ReservationType extends AbstractType
 {
-    const HALF_DAY_TIME = 12; // Time in 24H to start an 1/2 Day
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -22,7 +20,9 @@ class ReservationType extends AbstractType
                 'widget' => 'single_text',
                 'attr' => ['value' => \date('Y-m-d')]])
             ->add('visitType', ChoiceType::class, [
-                'choices' => $this->dayType(),
+                'choices' => [
+                    'Full-day' => 'fullDay',
+                    'Half-day' => 'halfDay'],
                 'expanded' => \TRUE,
                 'multiple' => \FALSE,])
             ->add('tickets', CollectionType::class, [
@@ -37,16 +37,5 @@ class ReservationType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Reservation::class,
         ]);
-    }
-
-    public function dayType()
-    {
-        $dayType = ['Full-day' => 'fullDay', 'Half-day' => 'halfDay'];
-
-        if (\date('H') > self::HALF_DAY_TIME) {
-            $dayType = ['Half-day' => 'halfDay'];
-        }
-
-        return $dayType;
     }
 }

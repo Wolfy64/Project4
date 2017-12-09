@@ -13,6 +13,25 @@ class TicketRepository extends ServiceEntityRepository
         parent::__construct($registry, Ticket::class);
     }
 
+    /**
+     * Count how many tickets are they in database for a specific day
+     * 
+     * @param $date
+     * @return $numberOfTicketsDay[]
+     */
+    public function countTicketByDay($date)
+    {
+        return \count( $this->createQueryBuilder('t')
+            ->addSelect('r')
+            ->join('t.reservation','r')
+            ->where('r.bookingDate = :date')
+            ->setParameter(':date',$date)
+            ->getQuery()
+            ->getResult())
+            // ->getScalarResult()
+        ;
+    }
+
     /*
     public function findBySomething($value)
     {
