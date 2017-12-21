@@ -1,0 +1,123 @@
+@font-face {
+    font-family: "Roboto";
+    font-style: normal;
+    font-weight: 300;
+    src: local("Roboto Light"), local("Roboto-Light"), url("https://fonts.gstatic.com/s/roboto/v18/Hgo13k-tfSpn0qi1SFdUfZBw1xU1rKptJj_0jans920.woff2") format("woff2");
+    unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2212, U+2215;
+}
+
+body {
+    font-family: "Roboto",sans-serif;
+    background-color: #070707;
+    background-image: url(louvre_background.jpg);
+    background-repeat: no-repeat;
+    background-position: top;
+    background-origin: initial;
+}
+
+input {
+    padding: 10px 20px;
+    border: 1px solid #999;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    /* width: 160px; */
+}
+
+select {
+    padding: 10px 20px;
+    border: 1px solid #999;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    width: 200px;
+}
+
+.container{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas: 
+    "flash-notice flash-notice flash-notice flash-notice"
+    ". main main ."
+    "footer footer footer footer";
+    border: 1px solid black;
+    /* background: radial-gradient(#FFF176, #F57F17); */
+    min-height: 100%;
+}
+
+.flash-notice {
+    grid-area: flash-notice;
+    grid-column: 2/4;
+    max-width: 600px;
+    background-color: #5bc85b80;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 100px;
+    margin-bottom: -50px;
+}
+
+.main {
+    grid-area: main;
+    grid-column: 2/4;
+    display: grid;
+    align-self: center;
+    max-width: 600px;
+    margin: 100px 0% 100px 0%;
+    background: #FFFFFF;
+    border-radius: 5px;
+}
+
+.form_header {
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #000;
+}
+
+.form_errors {
+    color: #c22424;
+    text-align: center;
+}
+
+.label {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.input {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#reservation_visitType label {
+    margin-right: 30px;
+}
+
+#reservation_visitType input {
+    margin-left: 30px;
+    margin-right: 15px;
+}
+
+.line {
+    border-bottom: 1px solid #000;
+}
+
+.break {
+    border: solid #6666661a 0.5px;
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+.footer {
+    grid-area: footer;
+    grid-column: 1/5;
+}
+
+/* .container div:nth-child(even) {
+    background-color: rgb(121, 182, 121);
+}
+
+.container div:nth-child(odd) {
+    background-color: rgb(137, 141, 184);
+} */
+
+

@@ -2,30 +2,90 @@
 
 {% block body %}
 
-<div class="column col-12 col-mx-auto">
-
-    <h1>Louvre tickets office</h1>
-
-    {# you can read and display just one flash message type... #}
     {% for message in app.flashes('notice') %}
         <div class="flash-notice">
-        <h3>{{ message }}</h3>
+            <p>{{ message }}</p>
         </div>
     {% endfor %}
 
-    <div class="form-horizontal">
-        <div class="form-group">
-
-            {{ form_start(form) }}
-            {{ form_errors(form) }}
-            {{ form_row(form.bookingDate) }}
-            {{ form_row(form.visitType) }}
+    <div class="main">
+        <div class="form_header">
+            <h1>Louvre Tickets Office</h1>
+        </div>
+        {{ form_start(form) }}
+            <div class="label">
+                {{ form_label(form.bookingDate)}}
+            </div>
+            <div class="form_errors">
+                {{ form_errors(form.bookingDate) }}
+            </div>
+            <div class="input">
+                {{ form_widget(form.bookingDate) }}
+                <p class="break"></p>
+            </div>
+            <div class="label">
+                {{ form_label(form.visitType) }}
+            </div>
+            <div class="form_errors">
+                {{ form_errors(form) }}
+            </div>
+            <div class="input line">
+                {{ form_widget(form.visitType) }}
+            </div>
+            <div class="label">
+                <h2>Ticket</h2>
+            </div>
             {% for ticket in form.tickets %}
-                {{ form_row(ticket.guest) }}
-                {{ form_row(ticket.reducedPrice) }}
+                <div class="form_errors">
+                    {{ form_errors(ticket.guest.firstName) }}
+                    {{ form_errors(ticket.guest.lastName) }}
+                </div>
+                <div class="input">
+                    {{ form_widget(ticket.guest.firstName) }}
+                    {{ form_widget(ticket.guest.lastName) }}
+                    <p class="break"></p>
+                </div>
+                <div class="label">
+                    {{ form_label(ticket.guest.dateOfBirth) }}
+                </div>
+                <div class="form_errors">
+                    {{ form_errors(ticket.guest.dateOfBirth) }}
+                </div>
+                <div class="input">
+                    {{ form_widget(ticket.guest.dateOfBirth) }}
+                    <p class="break"></p>
+                </div>
+                <div class="label">
+                    {{ form_label(ticket.guest.country) }}
+                </div>
+                <div class="form_errors">
+                    {{ form_errors(ticket.guest.country) }}
+                </div>
+                <div class="input">
+                    {{ form_widget(ticket.guest.country) }}
+                    <p class="break"></p>
+                </div>
+                <div class="label">
+                    {{ form_label(ticket.reducedPrice) }}
+                </div>
+                <div class="form_errors">
+                    {{ form_errors(ticket.reducedPrice) }}
+                </div>
+                <div class="input">
+                    {{ form_widget(ticket.reducedPrice) }}
+                    {{ form_label(ticket.reducedPrice) }}
+                    <p class="break"></p>
+                </div>
             {% endfor %}
-            {{ form_row(form.email)}}
-
+            <div class="label">
+                {{ form_label(form.email)}}
+            </div>
+            <div class="form_errors">
+                {{ form_errors(form.email) }}
+            </div>
+            <div class="input">
+                {{ form_widget(form.email)}}
+            </div>
 
             <a href="#" id="add-another-ticket">Add another ticket</a>
             </br>
@@ -33,20 +93,17 @@
             {# store the prototype on the data-prototype attribute #}
             <div id="ticket-fields-list" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e }}">
             </div>
+            <!-- <div id="ticket-fields-list" data-prototype="class=main">
+            </div> -->
 
-            <input type="submit" value="Send" class="btn btn-primary" />
-            {{ form_end(form) }}
-        </div>
+            <input type="submit" value="Send" class="btn btn-primary" /> 
+        {{ form_end(form) }}
     </div>
 
-
-
-    <h2>TEST</h2>
+    <!-- <h2>TEST</h2>
     <h3>le cout total est de {{ cost }} </h3>
     <h3>le type de billet est {{ priceType }} </h3>
     <h3>le prix du billet est {{ amount }} </h3>
-    <h3>nombre de billet restant {{ billet }} </h3>
-
-</div>
-
+    <h3>nombre de billet restant {{ billet }} </h3> -->
+    
 {% endblock %}

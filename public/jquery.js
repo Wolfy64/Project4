@@ -9,6 +9,7 @@ jQuery(document).ready(function () {
 
         // grab the prototype template
         var newWidget = ticketList.attr('data-prototype');
+        
         // replace the "__name__" used in the id and name of the prototype
         // with a number that's unique to your emails
         // end name attribute looks like name="contact[emails][2]"
