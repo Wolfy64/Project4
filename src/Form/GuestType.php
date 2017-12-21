@@ -15,11 +15,18 @@ class GuestType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName', TextType::class, ['attr' => ['placeholder' => 'John']])
-            ->add('lastName', TextType::class, ['attr' => ['placeholder' => 'Doe']])
+            ->add('firstName', TextType::class, [
+                'attr' => ['placeholder' => 'First name'],
+                'label' => false])
+            ->add('lastName', TextType::class, [
+                'attr' => ['placeholder' => 'Last name'],
+                'label' => false])
             ->add('country', CountryType::class,[
-                'preferred_choices' => ['FR','GB','ES','DE','IT']])
-            ->add('dateOfBirth', BirthdayType::class, ['widget' => 'single_text']);
+                'preferred_choices' => ['FR','GB','ES','DE','IT'],
+                'label' => 'Select Your Country :'])
+            ->add('dateOfBirth', BirthdayType::class, [
+                'widget' => 'single_text',
+                'label' => 'Enter Your Date Of Birth :']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

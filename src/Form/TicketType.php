@@ -15,7 +15,9 @@ class TicketType extends AbstractType
     {
         $builder
             ->add('guest', GuestType::class, ['label' => false])
-            ->add('reducedPrice', CheckboxType::class, ['required' => false]);
+            ->add('reducedPrice', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Do you have a Price Reduction ?']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -8,15 +8,10 @@ use Symfony\Component\Validator\ConstraintValidator;
 class PublicHolidayValidator extends ConstraintValidator
 {
     const PUBLIC_HOLIDAY = [
-        '01/01',
         '01/05',
-        '08/05',
-        '14/07',
-        '15/08',
         '01/11',
-        '11/11',
         '25/12'];
-    const DAY_OFF = ['Sunday'];
+    const DAY_OFF = ['Tuesday'];
 
     public function validate($date, Constraint $constraint)
     {

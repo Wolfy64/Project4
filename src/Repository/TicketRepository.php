@@ -21,17 +21,16 @@ class TicketRepository extends ServiceEntityRepository
      */
     public function countTicketByDay($date)
     {
-        return \count( $this->createQueryBuilder('t')
-            ->addSelect('r')
+        return $this->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
             ->join('t.reservation','r')
             ->where('r.bookingDate = :date')
             ->setParameter(':date',$date)
             ->getQuery()
-            ->getResult())
-            // ->getScalarResult()
+            ->getSingleScalarResult()
         ;
     }
-
+    
     /*
     public function findBySomething($value)
     {

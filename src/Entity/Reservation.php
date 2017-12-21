@@ -14,6 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Reservation
 {
+    const HALF_DAY_TIME = 14; // Time in 24H to start an 1/2 Day
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -44,7 +46,6 @@ class Reservation
      *      {"fullDay", "halfDay"},
      *      strict = true     
      *  )
-     * @ReservationAssert\VisitType()
      */
     private $visitType;
 
@@ -253,10 +254,31 @@ class Reservation
         $this->tickets->removeElement($ticket);
     }
 
+    /**
+     * Define price of $cost
+     * 
+     * @return $cost
+     */
     public function doCost()
     {
         foreach ($this->tickets as $ticket) {
             $this->cost += $ticket->getAmount();
         }
+    }
+
+    /**
+     * @Assert\IsTrue(message="Sorry, you can't get a Full-day ticket.")
+     */
+    public function isVisitTypeValid()
+    {
+        if ( $this->bookingDate->format('Y-m-d') === \date('Y-m-d') ){
+
+            if (\date('H') >= self::HALF_DAY_TIME){
+
+                return $this->visitType === "halfDay";
+            }
+        }
+
+        return true;
     }
 }

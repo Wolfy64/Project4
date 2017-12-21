@@ -18,18 +18,24 @@ class ReservationType extends AbstractType
         $builder
             ->add('bookingDate', DateType::class, [
                 'widget' => 'single_text',
-                'attr' => ['value' => \date('Y-m-d')]])
+                'attr' => ['value' => \date('Y-m-d')],
+                'label' => 'Please Choose Your Date :'])
             ->add('visitType', ChoiceType::class, [
                 'choices' => [
                     'Full-day' => 'fullDay',
                     'Half-day' => 'halfDay'],
                 'expanded' => \TRUE,
-                'multiple' => \FALSE,])
+                'multiple' => \FALSE,
+                'label' => 'Which kind of tickets do you wish :'])
             ->add('tickets', CollectionType::class, [
                 'entry_type' => TicketType::class,
                 'allow_add' => true,
                 'allow_delete' => true])
-            ->add('email', TextType::class, ['attr' => ['placeholder' => 'John.Doe@mail.com']]);
+            ->add('email', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'John.Doe@mail.com'],
+                'label' => 'Enter Your Email Adress'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

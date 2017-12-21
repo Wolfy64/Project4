@@ -205,8 +205,6 @@ class Ticket
     /**
      * Define priceType
      * 
-     * @param DateTime $dateOfBirth
-     * 
      * @return priceType
      */
     public function doPriceType()
@@ -235,8 +233,6 @@ class Ticket
 
     /**
      * Define amount
-     * 
-     * @param const priceType
      * 
      * @return amount
      */
