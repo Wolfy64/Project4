@@ -32,51 +32,53 @@
             <div class="input line">
                 {{ form_widget(form.visitType) }}
             </div>
-            <div class="label">
-                <h2>Ticket</h2>
+            <div class="ticket">
+                <div class="label">
+                    <h2>Ticket</h2>
+                </div>
+                {% for ticket in form.tickets %}
+                    <div class="form_errors">
+                        {{ form_errors(ticket.guest.firstName) }}
+                        {{ form_errors(ticket.guest.lastName) }}
+                    </div>
+                    <div class="input">
+                        {{ form_widget(ticket.guest.firstName) }}
+                        {{ form_widget(ticket.guest.lastName) }}
+                        <p class="break"></p>
+                    </div>
+                    <div class="label">
+                        {{ form_label(ticket.guest.dateOfBirth) }}
+                    </div>
+                    <div class="form_errors">
+                        {{ form_errors(ticket.guest.dateOfBirth) }}
+                    </div>
+                    <div class="input">
+                        {{ form_widget(ticket.guest.dateOfBirth) }}
+                        <p class="break"></p>
+                    </div>
+                    <div class="label">
+                        {{ form_label(ticket.guest.country) }}
+                    </div>
+                    <div class="form_errors">
+                        {{ form_errors(ticket.guest.country) }}
+                    </div>
+                    <div class="input">
+                        {{ form_widget(ticket.guest.country) }}
+                        <p class="break"></p>
+                    </div>
+                    <div class="label">
+                        {{ form_label(ticket.reducedPrice) }}
+                    </div>
+                    <div class="form_errors">
+                        {{ form_errors(ticket.reducedPrice) }}
+                    </div>
+                    <div class="input">
+                        {{ form_widget(ticket.reducedPrice) }}
+                        {{ form_label(ticket.reducedPrice) }}
+                        <p class="break"></p>
+                    </div>
+                {% endfor %}
             </div>
-            {% for ticket in form.tickets %}
-                <div class="form_errors">
-                    {{ form_errors(ticket.guest.firstName) }}
-                    {{ form_errors(ticket.guest.lastName) }}
-                </div>
-                <div class="input">
-                    {{ form_widget(ticket.guest.firstName) }}
-                    {{ form_widget(ticket.guest.lastName) }}
-                    <p class="break"></p>
-                </div>
-                <div class="label">
-                    {{ form_label(ticket.guest.dateOfBirth) }}
-                </div>
-                <div class="form_errors">
-                    {{ form_errors(ticket.guest.dateOfBirth) }}
-                </div>
-                <div class="input">
-                    {{ form_widget(ticket.guest.dateOfBirth) }}
-                    <p class="break"></p>
-                </div>
-                <div class="label">
-                    {{ form_label(ticket.guest.country) }}
-                </div>
-                <div class="form_errors">
-                    {{ form_errors(ticket.guest.country) }}
-                </div>
-                <div class="input">
-                    {{ form_widget(ticket.guest.country) }}
-                    <p class="break"></p>
-                </div>
-                <div class="label">
-                    {{ form_label(ticket.reducedPrice) }}
-                </div>
-                <div class="form_errors">
-                    {{ form_errors(ticket.reducedPrice) }}
-                </div>
-                <div class="input">
-                    {{ form_widget(ticket.reducedPrice) }}
-                    {{ form_label(ticket.reducedPrice) }}
-                    <p class="break"></p>
-                </div>
-            {% endfor %}
             <div class="label">
                 {{ form_label(form.email)}}
             </div>
@@ -86,15 +88,17 @@
             <div class="input">
                 {{ form_widget(form.email)}}
             </div>
-
-            <a href="#" id="add-another-ticket">Add another ticket</a>
-            </br>
-
-            {# store the prototype on the data-prototype attribute #}
-            <div id="ticket-fields-list" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e }}">
+            
+            <div class="tickets" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e('html_attr') }}">
             </div>
-            <!-- <div id="ticket-fields-list" data-prototype="class=main">
-            </div> -->
+
+            {# Prototype #}
+            {# <div class="tickets" 
+                 data-prototype="
+                    {% filter escape %} 
+                        {{ include('louvre/prototype.html.twig', { 'form_widget(':form.tickets.vars.prototype }) }}
+                    {% endfilter %}">
+            </div> #}
 
             <input type="submit" value="Send" class="btn btn-primary" /> 
         {{ form_end(form) }}
