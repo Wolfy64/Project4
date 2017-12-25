@@ -12,12 +12,15 @@
                 src="https://checkout.stripe.com/checkout.js" 
                 class="stripe-button" 
                 data-key="pk_test_zwG6fcavFG9NgdGA3aOaY2oZ" 
-                data-amount={{ amount * 100}}
+                data-amount={{ amount }}
                 data-name="Louvre" 
                 data-description="2 ticket(s)" 
                 data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                data-locale="auto">
-                </script>
+                data-locale="auto"
+                data-currency='eur'
+                data-email={{ email }}
+                data-allow-remember-me=false>
+            </script>
         </form>
     
         {# <script src="https://js.stripe.com/v3/"></script>
