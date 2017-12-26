@@ -1,0 +1,30 @@
+{% block body %}
+<a href="{{ 'http://www.louvre.fr' }}">
+    <img src="{{ absolute_url('logo.png') }}" height="50"></br>
+    Louvre.fr
+</a>
+<p>
+Musée du Louvre,</br>
+75058 Paris</br>
+France</br>
+Tel.: +33 (0)1 40 20 53 17
+</p>
+
+<h3>Order receipt Nº {{ code }}</h3>
+
+<p>You are receiving this email because you order a reservation for {{ bookingDate }}:</p>
+<p>
+    <ul>
+        {% for ticket in tickets %}
+        <li>
+            <strong>{{ ticket.guest.firstName }} {{ ticket.guest.LastName }}</strong> Price: {{ ticket.amount }},00 €
+        </li>
+        {% endfor %}
+    </ul>
+</p>
+
+<p><strong>Total amount: {{ amount }},00 €</strong></br></p>
+
+<p>Thank you for your order !</p>
+
+{% endblock %}

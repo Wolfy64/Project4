@@ -16,12 +16,18 @@ class LouvreController extends Controller
 {
     const SOLD_TIKETS_LIMIT = 1000;
 
+    public function __construct(\Swift_Mailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
+
     public function index(Request $request, Session $session)
     {
         $reservation = new Reservation();
-        $ticket = new Ticket();
-        $reservation->addTicket($ticket);
+        $ticket      = new Ticket();
 
+        $reservation->addTicket($ticket);
+        
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
@@ -43,29 +49,19 @@ class LouvreController extends Controller
 
             if ($this->ticketsLimit($reservation->getBookingDate()) != null) {
 
-                $amount = $this->amount = $reservation->getCost() * 100; // !!! MODE BOURRIN !!!
-                $session->set('amount', $amount);
                 $session->set('reservation', $reservation);
 
                 return $this->render('louvre/payment.html.twig', [
-                    'amount' => $reservation->getCost() * 100,
-                    'email' => $reservation->getEmail()
+                    'amount'      => $reservation->getCost() * 100,
+                    'email'       => $reservation->getEmail(),
+                    'countTicket' => count($reservation->getOrderDate()),
+                    'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
+                    'tickets'     => $reservation->getTickets()
                 ]);
-                
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($ticket);
-                $em->persist($this->reservation);
-                // $em->flush();
-
-                $this->addFlash(
-                    'notice',
-                    'Your form has been sent !'
-                );
             }
         }
 
-        return $this->render(
-            'louvre/index.html.twig',[
+        return $this->render('louvre/index.html.twig',[
                 'form' => $form->createView()
             ]);
     }
@@ -84,8 +80,7 @@ class LouvreController extends Controller
         ;
 
         if ( $numberOfTicketsByDay >= self::SOLD_TIKETS_LIMIT){
-            $this->addFlash(
-                'notice',
+            $this->addFlash('notice',
                 'Sorry, tickets for The Louvre Museum are sold out !'
             );
         }else{
@@ -97,30 +92,50 @@ class LouvreController extends Controller
     {
         $reservation = $session->get('reservation');
 
-        $stripe = array(
-            "secret_key" => "sk_test_vR13pPT8iogxBJKWC1FOuDDj",
+        $stripe = [
+            "secret_key"      => "sk_test_vR13pPT8iogxBJKWC1FOuDDj",
             "publishable_key" => "pk_test_zwG6fcavFG9NgdGA3aOaY2oZ"
-        );
+        ];
 
         \Stripe\Stripe::setApiKey($stripe['secret_key']);
 
-        $token = $request->get('stripeToken');
-        $email = $request->get('stripeEmail');
+        $customer = \Stripe\Customer::create([
+            'email'  => $request->get('stripeEmail'),
+            'source' => $request->get('stripeToken')
+        ]);
 
-        $customer = \Stripe\Customer::create(array(
-            'email' => $email,
-            'source' => $token
-        ));
-
-        $charge = \Stripe\Charge::create(array(
+        $charge = \Stripe\Charge::create([
             'customer' => $customer->id,
-            'amount' => $reservation->getCost() * 100,
+            'amount'   => $reservation->getCost() * 100,
             'currency' => 'usd'
-        ));
+        ]);
 
-        $this->addFlash(
-            'notice',
-            'Payment ok !'
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($reservation);
+        $em->flush();
+
+        return $this->redirectToRoute('mails');
+    }
+
+    public function mails(Session $session)
+    {
+        $reservation = $session->get('reservation');
+
+        $message = (new \Swift_Message('Order Receipt'))
+            ->setFrom('ledavid64@gmail.com')
+            ->setTo('symfonytestmail@armyspy.com')
+            ->setBody($this->renderView('emails/order.html.twig',[
+                    'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
+                    'tickets'     => $reservation->getTickets(),
+                    'amount'      => $reservation->getCost(),
+                    'code'        => \sha1($reservation->getemail())]),
+                'text/html'
+        );
+
+        $this->mailer->send($message);
+
+        $this->addFlash('notice',
+            'Your order receipt has been sent at your email !'
         );
 
         return $this->redirectToRoute('index');
