@@ -11,7 +11,7 @@ class PublicHolidayValidator extends ConstraintValidator
         '01/05',
         '01/11',
         '25/12'];
-    const DAY_OFF = ['Tuesday'];
+    const DAY_OFF = ['Tuesday','Sunday'];
 
     public function validate($date, Constraint $constraint)
     {

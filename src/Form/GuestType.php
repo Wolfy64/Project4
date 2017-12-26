@@ -26,7 +26,7 @@ class GuestType extends AbstractType
                 'label' => 'Select Your Country :'])
             ->add('dateOfBirth', BirthdayType::class, [
                 'widget' => 'single_text',
-                'label' => 'Enter Your Date Of Birth :']);
+                'label' => 'Date Of Birth :']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

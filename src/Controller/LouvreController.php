@@ -16,11 +16,6 @@ class LouvreController extends Controller
 {
     const SOLD_TIKETS_LIMIT = 1000;
 
-    public function __construct(\Swift_Mailer $mailer)
-    {
-        $this->mailer = $mailer;
-    }
-
     public function index(Request $request, Session $session)
     {
         $reservation = new Reservation();
@@ -36,11 +31,6 @@ class LouvreController extends Controller
             foreach ($reservation->getTickets() as $ticket) {
                 $ticket->doPriceType();
                 $ticket->doAmount();
-                // ============ USE TicketService ============ 
-                    // $ticketService->setTicket($ticket);
-                    // $ticket->setPriceType($ticketService->doPriceType());
-                    // $ticket->setAmount($ticketService->doAmount());
-                    // ============ USE TicketService ============ 
 
                 $ticket->setReservation($reservation);
             }
@@ -117,25 +107,25 @@ class LouvreController extends Controller
         return $this->redirectToRoute('mails');
     }
 
-    public function mails(Session $session)
+    public function mails(Session $session, \Swift_Mailer $mailer)
     {
         $reservation = $session->get('reservation');
 
         $message = (new \Swift_Message('Order Receipt'))
             ->setFrom('ledavid64@gmail.com')
-            ->setTo('symfonytestmail@armyspy.com')
+            ->setTo($reservation->getEmail())
             ->setBody($this->renderView('emails/order.html.twig',[
                     'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
                     'tickets'     => $reservation->getTickets(),
                     'amount'      => $reservation->getCost(),
-                    'code'        => \sha1($reservation->getemail())]),
+                    'code'        => \sha1($reservation->getEmail())]),
                 'text/html'
         );
 
-        $this->mailer->send($message);
+        $mailer->send($message);
 
         $this->addFlash('notice',
-            'Your order receipt has been sent at your email !'
+            'Your order receipt has been sent to your email !'
         );
 
         return $this->redirectToRoute('index');

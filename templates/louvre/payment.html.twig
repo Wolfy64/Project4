@@ -7,10 +7,10 @@
         </div>
         <h2>On {{ bookingDate }}</h2>
         <div>
-            <table style="width:100%">
+            <table>
                 <thead>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
                     <th>Price</th>
                 </thead>
                  {% for ticket in tickets %}
@@ -21,27 +21,27 @@
                 </tbody>
                  {% endfor %}
                  <tfoot>
-                     <td>Total amount</td>
-                     <td>{{ amount/100 }},00 €</td>
+                     <td class="emtpty"></td>
+                     <td class="emtpty"></td>
+                     <td class="amount">Total Amount : {{ amount/100 }},00 €</td>
                  </tfoot>
             </table>
         </div>
-            
-        {# =========== STRIPE =========== #}
-        <form action="/payment" method="POST">
-            <script 
-                src="https://checkout.stripe.com/checkout.js" 
-                class="stripe-button" 
-                data-key="pk_test_zwG6fcavFG9NgdGA3aOaY2oZ" 
-                data-amount={{ amount }}
-                data-name="Louvre" 
-                data-description="{{ countTicket }} ticket(s)" 
-                data-image="{{ absolute_url('logo.png')}}"
-                data-locale="auto"
-                data-currency='eur'
-                data-email={{ email }}
-                data-allow-remember-me=false>
-            </script>
-        </form>
+        <div class="payment">
+            <form action="/payment" method="POST">
+                <script 
+                    src="https://checkout.stripe.com/checkout.js" 
+                    class="stripe-button" 
+                    data-key="pk_test_zwG6fcavFG9NgdGA3aOaY2oZ" 
+                    data-amount={{ amount }} 
+                    data-name="Louvre" 
+                    data-description="{{ countTicket }} ticket(s)" 
+                    data-image="{{ absolute_url('logo.png')}}"
+                    data-locale="auto" 
+                    data-currency='eur' data-email={{ email }} 
+                    data-allow-remember-me=false>
+                </script>
+            </form> 
+        </div>
     </div>
 {% endblock %}

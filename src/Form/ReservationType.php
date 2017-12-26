@@ -19,14 +19,14 @@ class ReservationType extends AbstractType
             ->add('bookingDate', DateType::class, [
                 'widget' => 'single_text',
                 'attr' => ['value' => \date('Y-m-d')],
-                'label' => 'Please Choose Your Date :'])
+                'label' => 'Pick your day :'])
             ->add('visitType', ChoiceType::class, [
                 'choices' => [
                     'Full-day' => 'fullDay',
                     'Half-day' => 'halfDay'],
                 'expanded' => \TRUE,
                 'multiple' => \FALSE,
-                'label' => 'Which kind of tickets do you wish :'])
+                'label' => 'Select your ticket :'])
             ->add('tickets', CollectionType::class, [
                 'entry_type' => TicketType::class,
                 'allow_add' => true,
@@ -34,7 +34,7 @@ class ReservationType extends AbstractType
             ->add('email', TextType::class, [
                 'attr' => [
                     'placeholder' => 'John.Doe@mail.com'],
-                'label' => 'Enter Your Email Adress'
+                'label' => 'Email Address'
             ]);
     }
 
