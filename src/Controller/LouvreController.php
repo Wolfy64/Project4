@@ -44,7 +44,7 @@ class LouvreController extends Controller
                 return $this->render('louvre/payment.html.twig', [
                     'amount'      => $reservation->getCost() * 100,
                     'email'       => $reservation->getEmail(),
-                    'countTicket' => count($reservation->getOrderDate()),
+                    'countTicket' => count($reservation->getTickets()),
                     'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
                     'tickets'     => $reservation->getTickets()
                 ]);
@@ -118,7 +118,8 @@ class LouvreController extends Controller
                     'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
                     'tickets'     => $reservation->getTickets(),
                     'amount'      => $reservation->getCost(),
-                    'code'        => \sha1($reservation->getEmail())]),
+                    'code'        => \substr(\sha1($reservation->getEmail()), 0, 8)
+                ]),
                 'text/html'
         );
 

@@ -29,8 +29,18 @@
             <div class="form_errors">
                 {{ form_errors(form) }}
             </div>
-            <div class="input line">
+            <div class="input">
                 {{ form_widget(form.visitType) }}
+                <p class="break"></p>
+            </div>
+            <div class="label">
+                {{ form_label(form.email)}}
+            </div>
+            <div class="form_errors">
+                {{ form_errors(form.email) }}
+            </div>
+            <div class="input line">
+                {{ form_widget(form.email)}}
             </div>
             <div class="ticket">
                 <div class="label">
@@ -66,42 +76,28 @@
                         {{ form_widget(ticket.guest.country) }}
                         <p class="break"></p>
                     </div>
-                    <div class="label">
-                        {{ form_label(ticket.reducedPrice) }}
-                    </div>
                     <div class="form_errors">
                         {{ form_errors(ticket.reducedPrice) }}
                     </div>
-                    <div class="input">
+                    <div class="input reducedPrice">
                         {{ form_widget(ticket.reducedPrice) }}
                         {{ form_label(ticket.reducedPrice) }}
+                        <p id="showInfo">
+                            A valid student ID card, military badge or other proof must be provided at the entrance for reduced fares.
+                        </p>
                         <p class="break"></p>
                     </div>
                 {% endfor %}
+            </div>          
+            <div class="tickets">
             </div>
-            <div class="label">
-                {{ form_label(form.email)}}
+            <div class="btn-ticket">
+                <a href="#" id="remove_tag_link"><i class="fa fa-user-times fa-2x" aria-hidden="true"></i></a>
+                <a href="#" id="add_tag_link"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></a>
             </div>
-            <div class="form_errors">
-                {{ form_errors(form.email) }}
+            <div class="submit">
+                <input type="submit" value="Add To Cart" class="btn btn-primary"/> 
             </div>
-            <div class="input">
-                {{ form_widget(form.email)}}
-            </div>
-            
-            <div class="tickets" data-prototype="{{ form_widget(form.tickets.vars.prototype)|e('html_attr') }}">
-            </div>
-
-            {# Prototype #}
-            {# <div class="tickets" 
-                 data-prototype="
-                    {% filter escape %} 
-                        {{ include('louvre/prototype.html.twig', { 'form_widget(':form.tickets.vars.prototype }) }}
-                    {% endfilter %}">
-            </div> #}
-
-            <input type="submit" value="Send" class="btn btn-primary" /> 
         {{ form_end(form) }}
     </div>
-
 {% endblock %}
