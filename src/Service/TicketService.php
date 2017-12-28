@@ -65,7 +65,6 @@ class TicketService
         $priceType = $this->ticket->getPriceType();
         $amout = $this->ticket->getAmount();
         $reducedPriced = $this->ticket->getReducedPrice();
-        \dump($priceType);
 
         switch ($priceType) {
             case self::ELDERLY:

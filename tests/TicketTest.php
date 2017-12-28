@@ -2,7 +2,6 @@
 
 namespace App\Test\Entity;
 
-use Symfony\Component\Form\Tests\AbstractDivLayoutTest;
 use PHPUnit\Framework\TestCase;
 use App\Entity\Ticket;
 use App\Entity\Guest;
