@@ -42,4 +42,45 @@ class TicketTest extends TestCase
             [new \DateTime('-61 year'), Ticket::ELDERLY]
         ];
     }
+
+    /**
+     * @dataProvider priceTypeForAmount
+     */
+    public function testDefineAmount($priceType, $expectedAmount)
+    {
+        $ticket = new Ticket();
+        $ticket->setPriceType($priceType);
+        $ticket->setReducedPrice(false);
+        $ticket->doAmount();
+
+        $this->assertSame($expectedAmount, $ticket->getAmount());
+    }
+
+    public function priceTypeForAmount()
+    {
+        return [
+            ['toddler', 0 ],
+            ['child'  , 8 ],
+            ['normal' , 16],
+            ['elderly', 12]
+        ];
+    }
+
+    public function testExceptionAmount()
+    {
+        $ticket = new Ticket();
+        $ticket->setPriceType('other');
+        $this->expectException('Exception');
+        $ticket->doAmount();
+    }
+
+    public function testDefineAmountWithDiscount()
+    {
+        $ticket = new Ticket();
+        $ticket->setPriceType('normal');
+        $ticket->setReducedPrice(true);
+        $ticket->doAmount();
+
+        $this->assertSame(6, $ticket->getAmount());        
+    }
 }
