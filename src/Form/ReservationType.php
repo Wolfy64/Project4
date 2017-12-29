@@ -33,7 +33,7 @@ class ReservationType extends AbstractType
                 'allow_delete' => true])
             ->add('email', TextType::class, [
                 'attr' => [
-                    'placeholder' => 'John.Doe@mail.com'],
+                    'placeholder' => 'john.doe@mail.com'],
                 'label' => 'Email Address'
             ]);
     }
