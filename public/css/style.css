@@ -10,7 +10,7 @@
 body {
     font-family: "Roboto",sans-serif;
     background-color: #070707;
-    background-image: url(louvre_background.jpg);
+    background-image: url(../images/louvre_background.jpg);
     background-repeat: no-repeat;
     background-position: top;
     background-origin: initial;
@@ -37,9 +37,9 @@ select {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-areas: 
+    "header header header header"
     "flash-notice flash-notice flash-notice flash-notice"
-    ". main main ."
-    "footer footer footer footer";
+    ". main main .";
     border: 1px solid black;
     min-height: 100%;
 }
@@ -47,22 +47,21 @@ select {
 .flash-notice {
     grid-area: flash-notice;
     grid-column: 2/4;
+    display: grid;
     max-width: 600px;
     background-color: #ffdcd0;
-    text-align: center;
     border-radius: 5px;
-    margin-top: 100px;
-    margin-bottom: -50px;
     font-style: italic;
+    text-align: center;
+    margin-top: 100px;
 }
 
 .main {
     grid-area: main;
     grid-column: 2/4;
     display: grid;
-    align-self: center;
     max-width: 600px;
-    margin: 100px 0% 100px 0%;
+    margin: 100px auto 100px auto;
     background: #FFFFFF;
     border-radius: 5px;
 }
@@ -207,43 +206,49 @@ th {
     border-top: 1px solid #000;
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 600px) {
+
+    body{
+        font-size: 0.8rem;
+    }
     .container {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-areas: 
         "flash-notice flash-notice flash-notice flash-notice" 
         "main main main main" 
         "footer footer footer footer";
-        border: 1px solid black;
-        min-height: 100%;
-    }
-
-    .main {
-        grid-area: main;
-        grid-column: 1/5;
-        display: grid;
-        align-self: center;
-        max-width: 600px;
-        margin: 0px 0% 0px 0%;
-        background: #FFFFFF;
-        border-radius: 0px;
     }
 
     .flash-notice {
-        grid-area: flash-notice;
         grid-column: 1/5;
-        max-width: 600px;
-        background-color: #ffdcd0;
-        text-align: center;
         margin-top: 0px;
         margin-bottom: 0px;
-        font-style: italic;
         border-radius: 0px;
         border-bottom: 1px solid black;
     }
 
-    h1 {
+    .main {
+        grid-column: 1/5;
+        margin: 0px 0px 0px 0px;
+        border-radius: 0px;
+    }
+
+    .form_header > h1 {
         font-size: 1.5rem;
     }
+
+    #reservation_visitType label {
+        margin-right: 10px;
+    }
+
+    #reservation_visitType input {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
 }
+
+
+
+
+
+
+
