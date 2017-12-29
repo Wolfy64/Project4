@@ -220,10 +220,10 @@ class Ticket
             case $interval >= 12:
                 $this->priceType = self::NORMAL;
                 break;
-            case $interval > 4 && $interval < 12:
+            case $interval >= 4 && $interval < 12:
                 $this->priceType = self::CHILD;
                 break;
-            case $interval <= 4:
+            case $interval < 4:
                 $this->priceType = self::TODDLER;
                 break;
             default:

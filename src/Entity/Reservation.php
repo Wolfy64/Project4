@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Reservation
 {
     const HALF_DAY_TIME = 14; // Time in 24H to start an 1/2 Day
+    const SOLD_TIKETS_LIMIT = 1000;
 
     /**
      * @ORM\Id

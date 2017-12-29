@@ -3,19 +3,15 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
-use App\Form\ReservationType;
 use App\Entity\Reservation;
 use App\Entity\Ticket;
+use App\Form\ReservationType;
 use App\Repository\TicketRepository;
-use Symfony\Component\Form\RequestHandlerInterface;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class LouvreController extends Controller
 {
-    const SOLD_TIKETS_LIMIT = 1000;
-
     public function index(Request $request, Session $session)
     {
         $reservation = new Reservation();
@@ -28,25 +24,42 @@ class LouvreController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            // Define $priceType $Amount and add Ticket in Reservation
             foreach ($reservation->getTickets() as $ticket) {
                 $ticket->doPriceType();
                 $ticket->doAmount();
-
                 $ticket->setReservation($reservation);
             }
 
+            // Define cost for the whole reservation
             $reservation->doCost();
 
-            if ($this->ticketsLimit($reservation->getBookingDate()) != null) {
+            // If a cost for payment is null or negative
+            if ( $reservation->getCost() <= 0 ){
+                $this->addFlash('notice', $reservation->getCost() .'€ is an insufficient amount to order online.');
+                return $this->redirectToRoute('index');
+            }
 
+            $numberOfTicketsByDay =
+                $this->getDoctrine()
+                ->getRepository(Ticket::class)
+                ->countTicketByDay($reservation->getBookingDate());
+            $numberOfTikets = count($reservation->getTickets());
+            $remainingTicket = $numberOfTikets - Reservation::SOLD_TIKETS_LIMIT;
+
+            // To check if tikets are sold out
+            if ($numberOfTicketsByDay > Reservation::SOLD_TIKETS_LIMIT) {
+                $this->addFlash('notice', 'Sorry, tickets for The Louvre Museum are sold out !');
+            } elseif ( ($numberOfTicketsByDay+$numberOfTikets) > Reservation::SOLD_TIKETS_LIMIT ) {
+                $this->addFlash('notice', 'Sorry, only ' . $remainingTicket . ' tickets left !');
+            } else {
                 $session->set('reservation', $reservation);
-
                 return $this->render('louvre/payment.html.twig', [
-                    'amount'      => $reservation->getCost() * 100,
-                    'email'       => $reservation->getEmail(),
+                    'amount' => $reservation->getCost() * 100,
+                    'email' => $reservation->getEmail(),
                     'countTicket' => count($reservation->getTickets()),
                     'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
-                    'tickets'     => $reservation->getTickets()
+                    'tickets' => $reservation->getTickets()
                 ]);
             }
         }
@@ -56,29 +69,7 @@ class LouvreController extends Controller
             ]);
     }
 
-    public function ticketsLimit($day = null)
-    {
-        if ($day === null){
-            $dateTime = new \DateTime();
-            $day = $dateTime->format('Y-m-d');
-        }
-
-        $numberOfTicketsByDay = 
-            $this->getDoctrine()
-                ->getRepository(Ticket::class)
-                ->countTicketByDay($day)
-        ;
-
-        if ( $numberOfTicketsByDay >= self::SOLD_TIKETS_LIMIT){
-            $this->addFlash('notice',
-                'Sorry, tickets for The Louvre Museum are sold out !'
-            );
-        }else{
-           return  $libre = self::SOLD_TIKETS_LIMIT - $numberOfTicketsByDay;
-        }
-    }
-
-    public function paymentProcess(Request $request, Session $session)
+    public function paymentProcess(Request $request, Session $session, \Swift_Mailer $mailer)
     {
         $reservation = $session->get('reservation');
 
@@ -100,6 +91,7 @@ class LouvreController extends Controller
             'currency' => 'usd'
         ]);
 
+        // Insert data in database
         $em = $this->getDoctrine()->getManager();
         $em->persist($reservation);
         $em->flush();
@@ -125,9 +117,7 @@ class LouvreController extends Controller
 
         $mailer->send($message);
 
-        $this->addFlash('notice',
-            'Your order receipt has been sent to your email !'
-        );
+        $this->addFlash('notice','Your order receipt has been sent to your email !');
 
         return $this->redirectToRoute('index');
     }
