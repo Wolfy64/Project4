@@ -31,7 +31,7 @@ class TicketTest extends TestCase
     {
         return[
             [new \DateTime('-3 year' ), Ticket::TODDLER],
-            [new \DateTime('-4 year' ), Ticket::TODDLER],
+            [new \DateTime('-4 year' ), Ticket::CHILD  ],
             [new \DateTime('-5 year' ), Ticket::CHILD  ],
             [new \DateTime('-11 year'), Ticket::CHILD  ],
             [new \DateTime('-12 year'), Ticket::NORMAL ],
