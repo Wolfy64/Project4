@@ -120,7 +120,13 @@ class LouvreController extends Controller
         }
 
         $this->addFlash('notice', $error);
-        return $this->redirectToRoute('index');
+        return $this->render('louvre/payment.html.twig', [
+            'amount' => $reservation->getCost() * 100,
+            'email' => $reservation->getEmail(),
+            'countTicket' => count($reservation->getTickets()),
+            'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
+            'tickets' => $reservation->getTickets()
+        ]);
     }
 
     public function mails(Session $session, \Swift_Mailer $mailer)

@@ -1,6 +1,12 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
+     {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+            <p>{{ message }}</p>
+        </div>
+    {% endfor %}
+
     <div class="main">
         <div class="form_header">
             <h1>Louvre Tickets Office</h1>
@@ -36,7 +42,7 @@
                     data-amount={{ amount }} 
                     data-name="Louvre" 
                     data-description="{{ countTicket }} ticket(s)" 
-                    data-image="{{ absolute_url('images/logo.png')}}"
+                    data-image="{{ absolute_url('images/logo_mini.png')}}"
                     data-locale="auto" 
                     data-currency='eur' data-email={{ email }} 
                     data-allow-remember-me=false>

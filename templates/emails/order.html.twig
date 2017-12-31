@@ -12,7 +12,8 @@ Tel.: +33 (0)1 40 20 53 17
 
 <h3>Order receipt Nº {{ code }}</h3>
 
-<p>You are receiving this email because you order a reservation for {{ bookingDate }}:</p>
+<p>You are receiving this email because you made a reservation.</p>
+<h4>Visit day : {{ bookingDate }}</h4>
 <p>
     <ul>
         {% for ticket in tickets %}
