@@ -268,7 +268,7 @@ class Reservation
     }
 
     /**
-     * @Assert\IsTrue(message="Sorry, you can't get a Full-day ticket.")
+     * @Assert\IsTrue(message="Sorry, you can't get a Full-day ticket after 14h00.")
      */
     public function isVisitTypeValid()
     {

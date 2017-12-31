@@ -9,6 +9,7 @@ use App\Entity\Reservation;
 use App\Entity\Ticket;
 use App\Form\ReservationType;
 use App\Repository\TicketRepository;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class LouvreController extends Controller
 {
@@ -85,18 +86,41 @@ class LouvreController extends Controller
             'source' => $request->get('stripeToken')
         ]);
 
-        $charge = \Stripe\Charge::create([
-            'customer' => $customer->id,
-            'amount'   => $reservation->getCost() * 100,
-            'currency' => 'usd'
-        ]);
+        try {
+            $charge = \Stripe\Charge::create([
+                'customer'    => $customer->id,
+                'amount'      => $reservation->getCost() * 100,
+                'currency'    => 'eur',
+                'description' => 'Louvre'
+            ]);
+            $payment = true;
+        } catch (\Stripe\Error\Card $e) {
+            // Since it's a decline, \Stripe\Error\Card will be caught
+            $body = $e->getJsonBody();
+            $error = $body['error']['message'];
+            $payment = false;
+        } catch (\Stripe\Error\RateLimit $e) {
+            // Too many requests made to the API too quickly
+            $body = $e->getJsonBody();
+            $error = $body['error']['message'];
+            $payment = false;
+        } catch (\Stripe\Error\InvalidRequest $e) {
+            // Invalid parameters were supplied to Stripe's API
+            $body = $e->getJsonBody();
+            $error = $body['error']['message'];
+            $payment = false;
+        } 
 
         // Insert data in database
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($reservation);
-        $em->flush();
+        if ( $payment === true ){
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($reservation);
+            $em->flush();
+            return $this->redirectToRoute('mails');
+        }
 
-        return $this->redirectToRoute('mails');
+        $this->addFlash('notice', $error);
+        return $this->redirectToRoute('index');
     }
 
     public function mails(Session $session, \Swift_Mailer $mailer)

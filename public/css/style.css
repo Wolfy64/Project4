@@ -38,10 +38,10 @@ select {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-areas: 
     "header header header header"
-    "flash-notice flash-notice flash-notice flash-notice"
+    ". flash-notice flash-notice ."
     ". main main .";
     border: 1px solid black;
-    min-height: 100%;
+    width: 100%;
 }
 
 .flash-notice {
@@ -54,6 +54,9 @@ select {
     font-style: italic;
     text-align: center;
     margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
 }
 
 .main {
@@ -64,6 +67,7 @@ select {
     margin: 100px auto 100px auto;
     background: #FFFFFF;
     border-radius: 5px;
+    width: 100%;
 }
 
 .form_header {
@@ -84,7 +88,6 @@ select {
 
 .form_errors {
     color: #c22424;
-    text-align: center;
 }
 
 .label {
