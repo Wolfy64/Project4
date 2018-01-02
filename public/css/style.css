@@ -148,11 +148,17 @@ select {
 #add_tag_link {
     color: #4ac24ae6;
     margin-left: 20%;
+    cursor: pointer;
 }
 
 #remove_tag_link {
     color: #c22424cc;
     margin-right: 20%;
+}
+
+.fa:active {
+    transform: scale(0.9);
+    transition: 0.2s;
 }
 
 .submit {
@@ -168,6 +174,20 @@ select {
     padding-bottom: 15px;
     background-color: #ffdcd0;
     border: 1px solid #ffdcd0;
+    box-shadow: 2px 5px 20px 0px rgba(24, 24, 24, 0.28);
+    cursor: pointer;
+    transition: 0.2s;
+    outline: none;
+}
+
+.submit>input:hover {
+    transform: scale(1.01);
+    box-shadow: 2px 5px 20px 0px rgba(24, 24, 28, 0.28);
+}
+
+.submit>input:active {
+    transform: scale(0.98);
+    box-shadow: 2px 5px 20px 0px rgba(24, 24, 18, 0.38);
 }
 
 h2 {
