@@ -46,7 +46,7 @@ class LouvreController extends Controller
                 ->getRepository(Ticket::class)
                 ->countTicketByDay($reservation->getBookingDate());
             $numberOfTikets = count($reservation->getTickets());
-            $remainingTicket = $numberOfTikets - Reservation::SOLD_TIKETS_LIMIT;
+            $remainingTicket = Reservation::SOLD_TIKETS_LIMIT - $numberOfTicketsByDay;
 
             // To check if tikets are sold out
             if ($numberOfTicketsByDay > Reservation::SOLD_TIKETS_LIMIT) {
