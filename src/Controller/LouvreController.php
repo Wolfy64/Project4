@@ -9,10 +9,9 @@ use App\Entity\Reservation;
 use App\Entity\Ticket;
 use App\Form\ReservationType;
 use App\Repository\TicketRepository;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use App\Services\Compute;
 use App\Services\Stripe;
-use App\Services\Message;
+use App\Services\Mail;
 
 class LouvreController extends Controller
 {
@@ -57,7 +56,7 @@ class LouvreController extends Controller
             ]);
     }
 
-    public function paymentProcess(Request $request, Session $session, \Swift_Mailer $mailer, Stripe $stripe)
+    public function paymentProcess(Request $request, Session $session, Stripe $stripe, Mail $mail)
     {
         $reservation = $session->get('reservation');
         $stripe->setReservation($reservation);
@@ -71,7 +70,11 @@ class LouvreController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($reservation);
             $em->flush();
-            return $this->redirectToRoute('mails');
+
+            $mail->setReservation($reservation);
+            $mail->send();
+            $this->addFlash('notice', 'Your order receipt has been sent to your email !');
+            return $this->redirectToRoute('index');
         }
 
         $this->addFlash('notice', $stripe->getErrorMsg());
@@ -82,28 +85,5 @@ class LouvreController extends Controller
             'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
             'tickets'     => $reservation->getTickets()
         ]);
-    }
-
-    public function mails(Session $session, \Swift_Mailer $mailer)
-    {
-        $reservation = $session->get('reservation');
-
-        $message = (new \Swift_Message('Order Receipt'))
-            ->setFrom('ledavid64@gmail.com')
-            ->setTo($reservation->getEmail())
-            ->setBody($this->renderView('emails/order.html.twig',[
-                    'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
-                    'tickets'     => $reservation->getTickets(),
-                    'amount'      => $reservation->getCost(),
-                    'code'        => \substr(\sha1($reservation->getEmail()), 0, 8)
-                ]),
-                'text/html'
-        );
-
-        $mailer->send($message);
-
-        $this->addFlash('notice','Your order receipt has been sent to your email !');
-
-        return $this->redirectToRoute('index');
     }
 }
