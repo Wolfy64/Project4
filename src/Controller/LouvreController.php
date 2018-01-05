@@ -11,6 +11,8 @@ use App\Form\ReservationType;
 use App\Repository\TicketRepository;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use App\Services\Compute;
+use App\Services\Stripe;
+use App\Services\Message;
 
 class LouvreController extends Controller
 {
@@ -55,62 +57,30 @@ class LouvreController extends Controller
             ]);
     }
 
-    public function paymentProcess(Request $request, Session $session, \Swift_Mailer $mailer)
+    public function paymentProcess(Request $request, Session $session, \Swift_Mailer $mailer, Stripe $stripe)
     {
         $reservation = $session->get('reservation');
+        $stripe->setReservation($reservation);
 
-        $stripe = [
-            "secret_key"      => "sk_test_vR13pPT8iogxBJKWC1FOuDDj",
-            "publishable_key" => "pk_test_zwG6fcavFG9NgdGA3aOaY2oZ"
-        ];
-
-        \Stripe\Stripe::setApiKey($stripe['secret_key']);
-
-        $customer = \Stripe\Customer::create([
-            'email'  => $request->get('stripeEmail'),
-            'source' => $request->get('stripeToken')
-        ]);
-
-        try {
-            $charge = \Stripe\Charge::create([
-                'customer'    => $customer->id,
-                'amount'      => $reservation->getCost() * 100,
-                'currency'    => 'eur',
-                'description' => 'Louvre'
-            ]);
-            $payment = true;
-        } catch (\Stripe\Error\Card $e) {
-            // Since it's a decline, \Stripe\Error\Card will be caught
-            $body = $e->getJsonBody();
-            $error = $body['error']['message'];
-            $payment = false;
-        } catch (\Stripe\Error\RateLimit $e) {
-            // Too many requests made to the API too quickly
-            $body = $e->getJsonBody();
-            $error = $body['error']['message'];
-            $payment = false;
-        } catch (\Stripe\Error\InvalidRequest $e) {
-            // Invalid parameters were supplied to Stripe's API
-            $body = $e->getJsonBody();
-            $error = $body['error']['message'];
-            $payment = false;
-        } 
+        $email = $request->get('stripeEmail');
+        $token = $request->get('stripeToken');
+        $paymentIsValid = $stripe->process($email, $token);
 
         // Insert data in database
-        if ( $payment === true ){
+        if ($paymentIsValid){
             $em = $this->getDoctrine()->getManager();
             $em->persist($reservation);
             $em->flush();
             return $this->redirectToRoute('mails');
         }
 
-        $this->addFlash('notice', $error);
+        $this->addFlash('notice', $stripe->getErrorMsg());
         return $this->render('louvre/payment.html.twig', [
-            'amount' => $reservation->getCost() * 100,
-            'email' => $reservation->getEmail(),
+            'amount'      => $reservation->getCost() * 100,
+            'email'       => $reservation->getEmail(),
             'countTicket' => count($reservation->getTickets()),
             'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
-            'tickets' => $reservation->getTickets()
+            'tickets'     => $reservation->getTickets()
         ]);
     }
 

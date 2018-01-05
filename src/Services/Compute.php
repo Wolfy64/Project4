@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Entity\Reservation;
 use App\Repository\TicketRepository;
+use Symfony\Component\BrowserKit\Request;
 
 class Compute
 {
@@ -142,7 +142,7 @@ class Compute
         if ($countTicket + $countReservation > self::SOLD_TIKETS_LIMIT){
             return self::SOLD_TIKETS_LIMIT - $countTicket;
         }
-        
+
         return 'yes';
     }
 }
