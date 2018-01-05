@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entity\Reservation;
+use App\Repository\TicketRepository;
 
 class Compute
 {
@@ -19,18 +20,26 @@ class Compute
     const CHILD   = 'child';
     const TODDLER = 'toddler';
 
-    public function price($reservation)
+    const SOLD_TIKETS_LIMIT = 1000;
+
+    private $reservation;
+
+    public function setReservation($reservation)
+    {
+        $this->reservation = $reservation;
+    }
+
+    public function price()
     {
         // Define $priceType $Amount and add Ticket in Reservation
-        foreach ($reservation->getTickets() as $ticket) {
+        foreach ($this->reservation->getTickets() as $ticket) {
             $this->doPriceType($ticket);
             $this->doAmount($ticket);
-            $ticket->setReservation($reservation);
+            $ticket->setReservation($this->reservation);
         }
 
         // Define cost for the whole reservation
-        $this->doCost($reservation);
-
+        $this->doCost();
     }
 
     /**
@@ -103,12 +112,37 @@ class Compute
      * 
      * @return $cost
      */
-    public function doCost($reservation)
+    public function doCost()
     {
-        foreach ($reservation->getTickets() as $ticket) {
-            $cost = $reservation->getCost() + $ticket->getAmount();
-            $reservation->setCost($cost);
+        foreach ($this->reservation->getTickets() as $ticket) {
+            $cost = $this->reservation->getCost() + $ticket->getAmount();
+            $this->reservation->setCost($cost);
         }
     }
 
+    /**
+     * Check if cost for payment is valid
+     * 
+     * @return bool
+     */
+    public function isCostValid()
+    {
+        return $this->reservation->getCost() > self::PRICE_MINIMUM;
+    }
+
+    public function hasTickets($numberTickets)
+    {
+        $countTicket = $numberTickets->countTicketByDay($this->reservation->getBookingDate());
+        $countReservation = count($this->reservation->getTickets());
+
+        if ($countTicket >= self::SOLD_TIKETS_LIMIT){
+            return 'none';
+        }
+
+        if ($countTicket + $countReservation > self::SOLD_TIKETS_LIMIT){
+            return self::SOLD_TIKETS_LIMIT - $countTicket;
+        }
+        
+        return 'yes';
+    }
 }

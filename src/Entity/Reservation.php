@@ -15,8 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Reservation
 {
     const HALF_DAY_TIME = 14; // Time in 24H to start an 1/2 Day
-    const SOLD_TIKETS_LIMIT = 1000;
-
+    
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -253,18 +252,6 @@ class Reservation
     public function removeTicket($ticket)
     {
         $this->tickets->removeElement($ticket);
-    }
-
-    /**
-     * Define price of $cost
-     * 
-     * @return $cost
-     */
-    public function doCost()
-    {
-        foreach ($this->tickets as $ticket) {
-            $this->cost += $ticket->getAmount();
-        }
     }
 
     /**

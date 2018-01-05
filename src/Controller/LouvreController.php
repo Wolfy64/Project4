@@ -14,7 +14,7 @@ use App\Services\Compute;
 
 class LouvreController extends Controller
 {
-    public function index(Request $request, Session $session, Compute $compute)
+    public function index(Request $request, Session $session, Compute $compute, TicketRepository $numberTickets)
     {
         $reservation = new Reservation();
         $ticket      = new Ticket();
@@ -24,35 +24,29 @@ class LouvreController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $compute->price($reservation);
+            $compute->setReservation($reservation);
+            $compute->price();
 
-            // If a cost for payment is null or negative
-            if ( $reservation->getCost() <= Compute::PRICE_MINIMUM ){
-                $this->addFlash('notice', $reservation->getCost() .'€ is an insufficient amount to order online.');
+            if (!$compute->isCostValid()){
+                $this->addFlash('notice', $reservation->getCost() . '€ is an insufficient amount to order online.');
                 return $this->redirectToRoute('index');
             }
 
-            $numberOfTicketsByDay =
-                $this->getDoctrine()
-                ->getRepository(Ticket::class)
-                ->countTicketByDay($reservation->getBookingDate());
-            $numberOfTikets = count($reservation->getTickets());
-            $remainingTicket = Reservation::SOLD_TIKETS_LIMIT - $numberOfTicketsByDay;
+            $hasTickets = $compute->hasTickets($numberTickets);
 
-            // To check if tikets are sold out
-            if ($numberOfTicketsByDay > Reservation::SOLD_TIKETS_LIMIT) {
-                $this->addFlash('notice', 'Sorry, tickets for The Louvre Museum are sold out !');
-            } elseif ( ($numberOfTicketsByDay+$numberOfTikets) > Reservation::SOLD_TIKETS_LIMIT ) {
-                $this->addFlash('notice', 'Sorry, only ' . $remainingTicket . ' tickets left !');
-            } else {
+            if ($hasTickets === 'yes'){
                 $session->set('reservation', $reservation);
                 return $this->render('louvre/payment.html.twig', [
-                    'amount' => $reservation->getCost() * 100,
-                    'email' => $reservation->getEmail(),
+                    'amount'      => $reservation->getCost() * 100,
+                    'email'       => $reservation->getEmail(),
                     'countTicket' => count($reservation->getTickets()),
                     'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
-                    'tickets' => $reservation->getTickets()
+                    'tickets'     => $reservation->getTickets()
                 ]);
+            }elseif ($hasTickets === 'none') {
+                $this->addFlash('notice', 'Sorry, tickets for The Louvre Museum are sold out !');
+            }else {
+                $this->addFlash('notice', 'Sorry, only ' . $hasTickets . ' tickets left !');
             }
         }
 
