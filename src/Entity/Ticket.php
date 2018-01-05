@@ -11,17 +11,6 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  */
 class Ticket
 {
-    const PRICE_ELDERLY = 12;
-    const PRICE_NORMAL = 16;
-    const PRICE_CHILD = 8;
-    const PRICE_TODDLER = 0;
-    const PRICE_DISCOUNT_RATE = 10;
-
-    const ELDERLY = 'elderly';
-    const NORMAL = 'normal';
-    const CHILD = 'child';
-    const TODDLER = 'toddler';
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -201,66 +190,6 @@ class Ticket
         $this->reservation = $reservation;
 
         return $this;
-    }
-
-    /**
-     * Define priceType
-     * 
-     * @return priceType
-     */
-    public function doPriceType()
-    {
-        $today = new \DateTime();
-        $interval = $today->diff($this->guest->getDateOfBirth())->format('%Y');
-
-        switch ($interval) {
-            case $interval >= 60:
-                $this->priceType = self::ELDERLY;
-                break;
-            case $interval >= 12:
-                $this->priceType = self::NORMAL;
-                break;
-            case $interval >= 4 && $interval < 12:
-                $this->priceType = self::CHILD;
-                break;
-            case $interval < 4:
-                $this->priceType = self::TODDLER;
-                break;
-            default:
-                throw new Exception("Error Processing Request => priceType: " . $interval);
-                break;
-        }
-    }
-
-    /**
-     * Define amount
-     * 
-     * @return amount
-     */
-    public function doAmount()
-    {
-        switch ($this->priceType) {
-            case self::ELDERLY:
-                $this->amount = self::PRICE_ELDERLY;
-                break;
-            case self::NORMAL:
-                $this->amount = self::PRICE_NORMAL;
-                break;
-            case self::CHILD:
-                $this->amount = self::PRICE_CHILD;
-                break;
-            case self::TODDLER:
-                $this->amount = self::PRICE_TODDLER;
-                break;
-            default:
-                throw new Exception("Error Processing Request => amount: " . $this->priceType);
-                break;
-        }
-
-        // Subtract discount if priceType = 'normal'
-        if ($this->getReducedPrice() === true && $this->priceType === self::NORMAL) {
-            $this->amount -= self::PRICE_DISCOUNT_RATE;
-        }
     }
 }
 

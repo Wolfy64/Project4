@@ -10,33 +10,24 @@ use App\Entity\Ticket;
 use App\Form\ReservationType;
 use App\Repository\TicketRepository;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use App\Services\Compute;
 
 class LouvreController extends Controller
 {
-    public function index(Request $request, Session $session)
+    public function index(Request $request, Session $session, Compute $compute)
     {
         $reservation = new Reservation();
         $ticket      = new Ticket();
-
         $reservation->addTicket($ticket);
-        
+
         $form = $this->createForm(ReservationType::class, $reservation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            // Define $priceType $Amount and add Ticket in Reservation
-            foreach ($reservation->getTickets() as $ticket) {
-                $ticket->doPriceType();
-                $ticket->doAmount();
-                $ticket->setReservation($reservation);
-            }
-
-            // Define cost for the whole reservation
-            $reservation->doCost();
+            $compute->price($reservation);
 
             // If a cost for payment is null or negative
-            if ( $reservation->getCost() <= 0 ){
+            if ( $reservation->getCost() <= Compute::PRICE_MINIMUM ){
                 $this->addFlash('notice', $reservation->getCost() .'€ is an insufficient amount to order online.');
                 return $this->redirectToRoute('index');
             }

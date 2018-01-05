@@ -126,7 +126,7 @@ class Reservation
     /**
      * Get cost
      *
-     * @return string
+     * @return integer
      */
     public function getCost()
     {
@@ -194,7 +194,7 @@ class Reservation
     /**
      * Set cost
      *
-     * @param string $cost
+     * @param int $cost
      *
      * @return Reservation
      */
