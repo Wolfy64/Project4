@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Repository\TicketRepository;
-use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class Compute
 {
@@ -23,6 +23,13 @@ class Compute
     const SOLD_TIKETS_LIMIT = 1000;
 
     private $reservation;
+    private $numberTickets;
+    private $message;
+
+    public function __construct(TicketRepository $numberTickets)
+    {
+        $this->numberTickets = $numberTickets;
+    }
 
     public function setReservation($reservation)
     {
@@ -127,22 +134,36 @@ class Compute
      */
     public function isCostValid()
     {
+        $this->message = 'ERROR : '. $this->reservation->getCost() . '€ is an insufficient amount to order online.';
         return $this->reservation->getCost() > self::PRICE_MINIMUM;
     }
 
-    public function hasTickets($numberTickets)
+    /**
+     * Check if tickets are not over the limit
+     *
+     * @return bool
+     */
+    public function hasTickets()
     {
-        $countTicket = $numberTickets->countTicketByDay($this->reservation->getBookingDate());
+        $countTicket = $this->numberTickets->countTicketByDay($this->reservation->getBookingDate());
         $countReservation = count($this->reservation->getTickets());
 
         if ($countTicket >= self::SOLD_TIKETS_LIMIT){
-            return 'none';
+            $this->message = 'Sorry, tickets for The Louvre Museum are sold out !';
+            return false;
         }
 
         if ($countTicket + $countReservation > self::SOLD_TIKETS_LIMIT){
-            return self::SOLD_TIKETS_LIMIT - $countTicket;
+            $count = self::SOLD_TIKETS_LIMIT - $countTicket;
+            $this->message = 'Sorry, only ' . $count . ' tickets left !';
+            return false;
         }
 
-        return 'yes';
+        return true;
+    }
+
+    public function getMessage()
+    {
+        return $this->message;
     }
 }

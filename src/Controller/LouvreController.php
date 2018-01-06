@@ -8,14 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Reservation;
 use App\Entity\Ticket;
 use App\Form\ReservationType;
-use App\Repository\TicketRepository;
 use App\Services\Compute;
 use App\Services\Stripe;
 use App\Services\Mail;
 
 class LouvreController extends Controller
 {
-    public function index(Request $request, Session $session, Compute $compute, TicketRepository $numberTickets)
+    public function index(Request $request, Session $session, Compute $compute)
     {
         $reservation = new Reservation();
         $ticket      = new Ticket();
@@ -29,13 +28,11 @@ class LouvreController extends Controller
             $compute->price();
 
             if (!$compute->isCostValid()){
-                $this->addFlash('notice', $reservation->getCost() . '€ is an insufficient amount to order online.');
+                $this->addFlash('notice', $compute->getMessage());
                 return $this->redirectToRoute('index');
             }
 
-            $hasTickets = $compute->hasTickets($numberTickets);
-
-            if ($hasTickets === 'yes'){
+            if ($compute->hasTickets() === true){
                 $session->set('reservation', $reservation);
                 return $this->render('louvre/payment.html.twig', [
                     'amount'      => $reservation->getCost() * 100,
@@ -44,13 +41,10 @@ class LouvreController extends Controller
                     'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
                     'tickets'     => $reservation->getTickets()
                 ]);
-            }elseif ($hasTickets === 'none') {
-                $this->addFlash('notice', 'Sorry, tickets for The Louvre Museum are sold out !');
-            }else {
-                $this->addFlash('notice', 'Sorry, only ' . $hasTickets . ' tickets left !');
             }
-        }
 
+            $this->addFlash('notice', $compute->getMessage());
+        }
         return $this->render('louvre/index.html.twig',[
                 'form' => $form->createView()
             ]);
