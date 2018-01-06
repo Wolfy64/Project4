@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f84774e720e3e178b8d8d5ba024163f",
+    "content-hash": "df95fe02c73b861d70ec1799331e4883",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3428,16 +3428,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v4.0.1",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "317c2002180f64292ed127bbe31dcf47594c6ed7"
+                "reference": "2bb1b9dac38d32c5afb00edc9371b5db4cf6d000"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/317c2002180f64292ed127bbe31dcf47594c6ed7",
-                "reference": "317c2002180f64292ed127bbe31dcf47594c6ed7",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/2bb1b9dac38d32c5afb00edc9371b5db4cf6d000",
+                "reference": "2bb1b9dac38d32c5afb00edc9371b5db4cf6d000",
                 "shasum": ""
             },
             "require": {
@@ -3492,7 +3492,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-28T22:05:27+00:00"
+            "time": "2018-01-03T07:38:00+00:00"
         },
         {
             "name": "symfony/twig-bridge",

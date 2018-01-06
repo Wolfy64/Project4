@@ -9,15 +9,15 @@
 
     <div class="main">
         <div class="form_header">
-            <h1>Louvre Tickets Office</h1>
+            <h1>{% trans %}Louvre Tickets Office{% endtrans %}</h1>
         </div>
-        <h2>On {{ bookingDate }}</h2>
+        <h2>{% trans %}On{% endtrans %} {{ bookingDate }}</h2>
         <div>
             <table>
                 <thead>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Price</th>
+                    <th>{% trans %}First Name{% endtrans %}</th>
+                    <th>{% trans %}Last Name{% endtrans %}</th>
+                    <th>{% trans %}Price{% endtrans %}</th>
                 </thead>
                  {% for ticket in tickets %}
                 <tbody>
@@ -29,7 +29,7 @@
                  <tfoot>
                      <td class="emtpty"></td>
                      <td class="emtpty"></td>
-                     <td class="amount">Total Amount : {{ amount/100 }},00 €</td>
+                     <td class="amount">{% trans %}Total Amount :{% endtrans %} {{ amount/100 }},00 €</td>
                  </tfoot>
             </table>
         </div>
@@ -44,7 +44,8 @@
                     data-description="{{ countTicket }} ticket(s)" 
                     data-image="{{ absolute_url('images/logo_mini.png')}}"
                     data-locale="auto" 
-                    data-currency='eur' data-email={{ email }} 
+                    data-currency='eur' 
+                    data-email={{ email }} 
                     data-allow-remember-me=false>
                 </script>
             </form> 

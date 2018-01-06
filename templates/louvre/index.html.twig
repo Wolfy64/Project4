@@ -10,7 +10,7 @@
 
     <div class="main">
         <div class="form_header">
-            <h1>Louvre Tickets Office</h1>
+            <h1>{% trans %}Louvre Tickets Office{% endtrans %}</h1>
         </div>
         {{ form_start(form) }}
             <div class="label">
@@ -83,7 +83,7 @@
                         {{ form_widget(ticket.reducedPrice) }}
                         {{ form_label(ticket.reducedPrice) }}
                         <p id="showInfo">
-                            A valid student ID card, military badge or other proof must be provided at the entrance for reduced fares.
+                             {% trans %}A valid student ID card, military badge or other proof must be provided at the entrance for reduced fares.{% endtrans %}
                         </p>
                         <p class="break"></p>
                     </div>
@@ -96,7 +96,7 @@
                 <a href="#" id="add_tag_link"><i class="fa fa-user-plus fa-2x" aria-hidden="true"></i></a>
             </div>
             <div class="submit">
-                <input type="submit" value="Add To Cart" class="btn btn-primary"/> 
+                <input type="submit" value="{% trans %}Add To Cart{% endtrans %}" class="btn btn-primary"/> 
             </div>
         {{ form_end(form) }}
     </div>

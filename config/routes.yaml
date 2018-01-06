@@ -5,7 +5,3 @@ index:
 payment:
    path: /payment
    defaults: { _controller: 'App\Controller\LouvreController::paymentProcess' }
-
-mails:
-   path: /mails
-   defaults: { _controller: 'App\Controller\LouvreController::mails' }
