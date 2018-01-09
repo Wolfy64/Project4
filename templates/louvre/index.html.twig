@@ -4,7 +4,7 @@
 
     {% for message in app.flashes('notice') %}
         <div class="flash-notice">
-            <p>{{ message }}</p>
+            <p>{{ message|trans }}</p>
         </div>
     {% endfor %}
 

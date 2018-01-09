@@ -1,20 +1,31 @@
 # translations/messages.fr.yaml
-Louvre Tickets Office: Billetterie du Louvre
-Pick your day :: Choisissez votre jour :
-Select your ticket :: Sélectionnez votre ticket :
-Full-day: Journée
-Half-day: Demi-journée
-Email Address: Adresse Email
-john.doe@mail.com: jean.dupont@mail.fr
-First name: Prénom
-Last name: Nom
-Date Of Birth :: Date de Naissance :
-Select Your Country :: Sélectionnez votre Pays :
-I have a reduction price: Je bénéficie d'une réduction de prix
-Add To Cart: Ajoutez au Panier
-First Name: Prénom
-Last Name: Nom
-Price: Prix
-Total Amount :: Montant Total :
-On: Le
-A valid student ID card, military badge or other proof must be provided at the entrance for reduced fares.: Une carte étudiant valide, un badge militaire ou une autre preuve doit être fourni à l'entrée pour les tarifs réduits.
+"Louvre Tickets Office": "Billetterie du Louvre"
+"Pick your day :": "Choisissez votre jour :"
+"Select your ticket :": "Sélectionnez votre ticket :"
+"Full-day": "Journée"
+"Half-day": "Demi-journée"
+"Email Address": "Adresse Email"
+"john.doe@mail.com": "jean.dupont@mail.fr"
+"First name": "Prénom"
+"Last name": "Nom"
+"Date Of Birth :": "Date de Naissance :"
+"Select Your Country :": "Sélectionnez votre Pays :"
+"I have a reduction price": "Je bénéficie d'une réduction de prix"
+"Add To Cart": "Ajoutez au Panier"
+"First Name": "Prénom"
+"Last Name": "Nom"
+"Price": "Prix"
+"Total Amount :": "Montant Total :"
+"On": "Le"
+"A valid student ID card, military badge or other proof must be provided at the entrance for reduced fares.": "Une carte étudiant valide, un badge militaire ou une autre preuve doit être fourni à l'entrée pour les tarifs réduits."
+"ERROR : The amount is insufficient to order online.": "ERREUR : Le montant est insuffisant pour commander en ligne"
+"Sorry, tickets for The Louvre Museum are sold out !": "Désolé, les billets pour le Musée du Louvre sont épuisés!"
+" ticket(s) left only!": " billets disponible(s) seulement!"
+"Your order receipt has been sent to your email !": "Votre reçu de commande a été envoyé à votre adresse email!"
+"ERROR : ": "ERREUR : "
+"Order receipt Nº": "Reçu de commande Nº "
+"You are receiving this email because you made a reservation.": "Vous recevez cet e-mail parce que vous avez fait une réservation."
+"Visit day :": "Jour de la visite :"
+"Price :": "Prix : "
+"Total amount:": "Montant total:"
+"Thank you for your order !": "Merci de votre commande"

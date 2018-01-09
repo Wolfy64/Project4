@@ -23,6 +23,7 @@ class GuestType extends AbstractType
                 'label' => false])
             ->add('country', CountryType::class,[
                 'preferred_choices' => ['FR','GB','ES','DE','IT'],
+                'placeholder' => '-------------------',
                 'label' => 'Select Your Country :'])
             ->add('dateOfBirth', BirthdayType::class, [
                 'widget' => 'single_text',

@@ -10,22 +10,22 @@ France</br>
 Tel.: +33 (0)1 40 20 53 17
 </p>
 
-<h3>Order receipt Nº {{ code }}</h3>
+<h3>{% trans %}Order receipt Nº{% endtrans %} {{ code }}</h3>
 
-<p>You are receiving this email because you made a reservation.</p>
-<h4>Visit day : {{ bookingDate }}</h4>
+<p>{% trans %}You are receiving this email because you made a reservation.{% endtrans %}</p>
+<h4>{% trans %}Visit day :{% endtrans %} {{ bookingDate }}</h4>
 <p>
     <ul>
         {% for ticket in tickets %}
         <li>
-            <strong>{{ ticket.guest.firstName }} {{ ticket.guest.LastName }}</strong> Price: {{ ticket.amount }},00 €
+            <strong>{{ ticket.guest.firstName }} {{ ticket.guest.LastName }} </strong>{% trans %}Price :{% endtrans %}{{ ticket.amount }},00 €
         </li>
         {% endfor %}
     </ul>
 </p>
 
-<p><strong>Total amount: {{ amount }},00 €</strong></br></p>
+<p><strong>{% trans %}Total amount:{% endtrans %} {{ amount }},00 €</strong></br></p>
 
-<p>Thank you for your order !</p>
+<p>{% trans %}Thank you for your order !{% endtrans %}</p>
 
 {% endblock %}

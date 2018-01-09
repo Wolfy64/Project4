@@ -26,12 +26,12 @@ class Mail
 
     public function send()
     {
-        $message = (new \Swift_Message('Order Receipt'))
+        $message = (new \Swift_Message('Louvre'))
             ->setFrom(self::EMAIL)
             ->setTo($this->reservation->getEmail())
             ->setBody(
                 $this->twig->render('emails/order.html.twig', [
-                    'bookingDate' => $this->reservation->getBookingDate()->format('l d F Y'),
+                    'bookingDate' => $this->reservation->getBookingDate()->format('d/m/Y'),
                     'tickets'     => $this->reservation->getTickets(),
                     'amount'      => $this->reservation->getCost(),
                     'code'        => \substr(\sha1($this->reservation->getEmail()), 0, 8)

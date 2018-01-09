@@ -1,7 +1,14 @@
 index:
-   path: /
-   defaults: { _controller: 'App\Controller\LouvreController::index' }
+   path: /{_locale}
+   controller: 'App\Controller\LouvreController::index'
+   requirements:
+        _locale: '%app_locales%'
+   defaults:
+        template: louvre/index.html.twig
+        _locale: '%locale%'
 
 payment:
    path: /payment
    defaults: { _controller: 'App\Controller\LouvreController::paymentProcess' }
+   requirements:
+        _locale: '%app_locales%'

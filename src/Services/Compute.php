@@ -134,7 +134,7 @@ class Compute
      */
     public function isCostValid()
     {
-        $this->message = 'ERROR : '. $this->reservation->getCost() . '€ is an insufficient amount to order online.';
+        $this->message = 'ERROR : The amount is insufficient to order online.';
         return $this->reservation->getCost() > self::PRICE_MINIMUM;
     }
 
@@ -155,7 +155,7 @@ class Compute
 
         if ($countTicket + $countReservation > self::SOLD_TIKETS_LIMIT){
             $count = self::SOLD_TIKETS_LIMIT - $countTicket;
-            $this->message = 'Sorry, only ' . $count . ' tickets left !';
+            $this->message = $count . ' tickets left only!';
             return false;
         }
 

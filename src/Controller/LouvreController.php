@@ -38,7 +38,7 @@ class LouvreController extends Controller
                     'amount'      => $reservation->getCost() * 100,
                     'email'       => $reservation->getEmail(),
                     'countTicket' => count($reservation->getTickets()),
-                    'bookingDate' => $reservation->getBookingDate()->format('l d F Y'),
+                    'bookingDate' => $reservation->getBookingDate()->format('d/m/Y'),
                     'tickets'     => $reservation->getTickets()
                 ]);
             }
