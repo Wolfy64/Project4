@@ -5,7 +5,6 @@ namespace App\Test\Controller;
 ob_start();
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-// use Symfony\Component\BrowserKit\Response;
 
 class LouvreControllerTest extends WebTestCase
 {
@@ -14,7 +13,6 @@ class LouvreControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/');
 
-        // echo $client->getResponse()->getContent();
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 
