@@ -9,6 +9,7 @@ index:
 
 payment:
    path: /payment
-   defaults: { _controller: 'App\Controller\LouvreController::paymentProcess' }
+   controller: 'App\Controller\LouvreController::paymentProcess'
+   methods:    [POST, HEAD]
    requirements:
         _locale: '%app_locales%'

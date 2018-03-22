@@ -8,7 +8,7 @@ use Twig\Environment;
 
 class Mail
 {
-    const EMAIL = 'ledavid64@gmail.com';
+    const EMAIL = 'louvre@project4.dewulfdavid.com';
 
     private $reservation;
     private $twig;
