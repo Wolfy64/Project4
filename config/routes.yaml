@@ -8,7 +8,7 @@ index:
         _locale: '%locale%'
 
 payment:
-   path: /payment
+   path: /{_locale}/payment
    controller: 'App\Controller\LouvreController::paymentProcess'
    methods:    [POST, HEAD]
    requirements:
